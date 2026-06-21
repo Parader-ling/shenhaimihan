@@ -1291,7 +1291,40 @@ function exportImage(){alert('📸 合成树截图：请使用 Ctrl+Shift+S (Win
 function reverseLookup(){if(!currentItem)return;showPage('reverse');document.getElementById('revSearch').value='';document.getElementById('reverseResult').innerHTML='<div class="nodata">🔍 请输入材料名称，查看可用于合成哪些装备</div>'}
 function doReverseLookup(materialName){if(!materialName.trim())return;let name=materialName.trim(),grouped={};craftingData.forEach(item=>{function fm(l){for(let m of l){if(m.name.includes(name))return m.qty;if(m.children){let q=fm(m.children);if(q)return q}}return 0}let qty=fm(item.materials);if(qty){if(!grouped[item.cat])grouped[item.cat]=[];grouped[item.cat].push({item,qty})}});let icons={载具:'🚗',工具:'🔧',基地模块:'🏠',生存装备:'🎒'},html='',count=0;for(let[cat,items]of Object.entries(grouped)){count+=items.length;html+=`<div class="group-header">${icons[cat]||''} ${cat}</div>`;items.sort((a,b)=>b.qty-a.qty);items.forEach(({item,qty})=>{html+=`<div class="reverse-item" onclick="openDetail('${item.id}')"><div class="r-left">${item.img} ${item.name}</div><span class="r-qty">${name}×${qty}</span></div>`})}document.getElementById('reverseResult').innerHTML=count?`<div style="font-size:12px;color:var(--text2);margin-bottom:10px">"${name}" 可用于合成 ${count} 件装备：</div>`+html:'<div class="nodata"><div class="big">🔍</div>未找到使用"'+name+'"的装备</div>'}
 
+// Creature/Leviathan Image Viewer
+function openCreatureImage(ev,id){
+  ev.stopPropagation();
+  var imgFile=IMG_MAP[id]||(id+".svg");
+  var src="images/items/"+imgFile;
+  var data=creatureData[id];
+  var name=""; craftingData.forEach(function(d){if(d.id===id) name=d.name});
+  var lb=document.getElementById("lightbox");
+  var lbImg=document.getElementById("lightboxImg");
+  var lbCap=document.getElementById("lightboxCaption");
+  lbImg.src=src;
+  lbImg.onerror=function(){lbImg.src="images/items/Peeper.png"};
+  lbCap.innerHTML='<b>'+(name||id)+'</b><br><span style="color:var(--text2);font-size:12px">'+(data?data.habitat:'')+'</span>';
+  lb.classList.add("active");
+  document.body.style.overflow="hidden";
+}
+function openLeviathanImage(ev,id){
+  ev.stopPropagation();
+  var imgFile=IMG_MAP[id]||(id+".svg");
+  var src="images/items/"+imgFile;
+  var data=leviathanData[id];
+  var name=""; craftingData.forEach(function(d){if(d.id===id) name=d.name});
+  var lb=document.getElementById("lightbox");
+  var lbImg=document.getElementById("lightboxImg");
+  var lbCap=document.getElementById("lightboxCaption");
+  lbImg.src=src;
+  lbImg.onerror=function(){lbImg.src="images/items/Reaper_Leviathan.png"};
+  lbCap.innerHTML='<b style="color:var(--red)">'+(name||id)+'</b><br><span style="color:var(--text2);font-size:12px">'+(data?data.habitat+' · '+data.size:'')+'</span>';
+  lb.classList.add("active");
+  document.body.style.overflow="hidden";
+}
+
 // Image Lightbox
+
 function openLightbox(imgEl) {
   const lb = document.getElementById('lightbox');
   const lbImg = document.getElementById('lightboxImg');
@@ -1490,7 +1523,7 @@ function openCreatureExhibit(){
     var imgSrc="images/items/"+imgFile;
     var dCls=data.danger?" danger":"";
     var dBadge=data.danger?"<span class=\"danger-badge\">⚠ 危险</span>":"";
-    html+='<div class="creature-card'+dCls+'" style="cursor:pointer" onclick="closeCreatureExhibit();openDetail('+item.id+')">';
+    html+='<div class="creature-card'+dCls+'" style="cursor:pointer" onclick="openCreatureImage(event,'+item.id+')">';
     html+='<img class="creature-card-img" src="'+imgSrc+'" alt="'+item.name+'" onerror="this.src=\x27images/items/Peeper.png\x27">';
     html+='<div class="creature-card-body">';
     html+='<h4>'+item.name+dBadge+'</h4>';
@@ -1520,7 +1553,7 @@ function openLeviathanExhibit(){
     var data=leviathanData[item.id]||{desc:"利维坦级巨型生物。",habitat:"未知",behavior:"未知",size:"未知",threat:"未知"};
     var imgFile=IMG_MAP[item.id]||(item.id+".svg");
     var imgSrc="images/items/"+imgFile;
-    html+='<div class="creature-card danger" style="grid-column:span 1;cursor:pointer" onclick="closeLeviathanExhibit();openDetail('+item.id+')">';
+    html+='<div class="creature-card danger" style="grid-column:span 1;cursor:pointer" onclick="openLeviathanImage(event,'+item.id+')">';
     html+='<img class="creature-card-img" src="'+imgSrc+'" alt="'+item.name+'" style="height:220px" onerror="this.src=\x27images/items/Reaper_Leviathan.png\x27">';
     html+='<div class="creature-card-body">';
     html+='<h4>'+item.name+'<span class="danger-badge">⚠ '+data.threat+'</span></h4>';
