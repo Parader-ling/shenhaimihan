@@ -297,6 +297,11 @@ body::after{content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);
 .tool-panel-tab{padding:5px 12px;border-radius:20px;font-size:11px;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text2);transition:all .3s;white-space:nowrap}
 .tool-panel-tab.active,.tool-panel-tab:hover{background:var(--teal);color:#000;border-color:var(--teal)}
 .tool-panel-list{padding:8px 10px}
+
+.tool-item-wrap{margin-bottom:4px}
+.tool-item-wrap .tool-item-detail{padding:6px 12px 10px;margin-top:0;border-top:1px solid rgba(255,255,255,.05);display:none}
+.tool-item-wrap .tool-item.expanded+.tool-item-detail{display:block}
+
 .tool-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;transition:all .3s;border:1px solid transparent;margin-bottom:3px}
 .tool-item:hover{background:rgba(78,205,196,.06);border-color:rgba(78,205,196,.2)}
 .tool-item.expanded{background:rgba(78,205,196,.1);border-color:var(--teal)}
@@ -305,8 +310,6 @@ body::after{content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);
 .tool-item-name{font-size:13px;font-weight:600;color:var(--text)}
 .tool-item-stars{font-size:10px;color:var(--gold);margin-top:1px}
 .tool-item-desc{font-size:11px;color:var(--text2);margin-top:2px;line-height:1.4}
-.tool-item-detail{display:none;padding:6px 12px 10px;margin-top:2px;border-top:1px solid rgba(255,255,255,.05)}
-.tool-item.expanded .tool-item-detail{display:block}
 .tool-item-detail .mat-row{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2);padding:2px 0}
 .tool-item-detail .mat-row img{width:20px;height:20px;border-radius:4px;object-fit:contain;background:rgba(0,0,0,.3)}
 .tool-item-detail .mat-label{font-weight:600;color:var(--warning)}
@@ -1316,12 +1319,11 @@ function toggleToolPanel(){
   if(toolPanelOpen) renderToolPanel();
 }
 
-function switchToolTab(cat){
+function switchToolTab(cat,ev){
   currentToolTab=cat;
   var tabs=document.querySelectorAll(".tool-panel-tab");
-  tabs.forEach(function(t){t.classList.remove("active")});
-  var e=window.event||event;
-  if(e&&e.target)e.target.classList.add("active");
+  for(var i=0;i<tabs.length;i++) tabs[i].classList.remove("active");
+  if(ev&&ev.target) ev.target.classList.add("active");
   expandedTool=null;
   renderToolPanel();
 }
@@ -1335,9 +1337,12 @@ function renderToolPanel(){
     var stars="";
     for(var i=0;i<(item.stars||2);i++) stars+="⭐";
     var desc=toolDescs[item.id]||"深海迷航中的基础装备，探索4546B星球的必备之物。";
+    var imgFile=IMG_MAP[item.id]||(item.id+".svg");
+    var imgSrc="images/items/"+imgFile;
     var expCls=expandedTool===item.id?" expanded":"";
-    html.push('<div class="tool-item'+expCls+'" onclick="expandToolItem(&quot;"+item.id+"&quot;)">');
-    html.push('<img class="tool-item-thumb" src="'+item.img+'" alt="'+item.name+'" onerror="this.style.display=\'none\'">');
+    html.push('<div class="tool-item-wrap">');
+    html.push('<div class="tool-item'+expCls+'" onclick="expandToolItem(&quot;'+item.id+'&quot;)">');
+    html.push('<img class="tool-item-thumb" src="'+imgSrc+'" alt="'+item.name+'" onerror="this.hidden=true">');
     html.push('<div class="tool-item-info">');
     html.push('<div class="tool-item-name">'+item.name+'</div>');
     html.push('<div class="tool-item-stars">'+stars+'</div>');
@@ -1351,11 +1356,11 @@ function renderToolPanel(){
         html.push('<div class="mat-row">');
         html.push('<span class="mat-label">'+m.name+'</span>');
         html.push('<span style="color:var(--warning)">×'+m.qty+'</span>');
-        html.push('<span style="font-size:10px">('+(m.source||[]).join(", ")+'</span>');
-        html.push('<span style="font-size:10px">🔪 '+m.tool+')</span>');
+        html.push('<span style="font-size:10px">('+(m.source||[]).join(", ")+' · 🔪 '+m.tool+')</span>');
         html.push('</div>');
       });
     }
+    html.push('</div>');
     html.push('</div>');
   });
   list.innerHTML=html.join("")||'<div style="text-align:center;padding:20px;color:var(--text2)">暂无道具</div>';
@@ -1375,9 +1380,9 @@ function expandToolItem(id){
     <span style="font-size:11px;color:var(--text2);cursor:pointer" onclick="toggleToolPanel()">✕</span>
   </div>
   <div class="tool-panel-tabs">
-    <div class="tool-panel-tab active" onclick="switchToolTab('all')">全部</div>
-    <div class="tool-panel-tab" onclick="switchToolTab('工具')">🔧 工具</div>
-    <div class="tool-panel-tab" onclick="switchToolTab('生存装备')">🎒 装备</div>
+    <div class="tool-panel-tab active" onclick="switchToolTab('all',event)">全部</div>
+    <div class="tool-panel-tab" onclick="switchToolTab('工具',event)">🔧 工具</div>
+    <div class="tool-panel-tab" onclick="switchToolTab('生存装备',event)">🎒 装备</div>
   </div>
   <div class="tool-panel-list" id="toolPanelList"></div>
 </div>
