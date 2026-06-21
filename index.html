@@ -1415,7 +1415,7 @@ function openVehicleExhibit(){
     var stars=""; for(var i=0;i<(item.stars||0);i++) stars+="⭐";
     var imgFile=IMG_MAP[item.id]||(item.id+".svg");
     var imgSrc="images/items/"+imgFile;
-    html+='<div class="creature-card" style="grid-column:span 1">';
+    html+='<div class="creature-card" style="grid-column:span 1;cursor:pointer" onclick="openVehicleDetail(\x27'+item.id+'\x27)">';
     html+='<img class="creature-card-img" src="'+imgSrc+'" alt="'+item.name+'" style="height:220px" onerror="this.src=\x27images/items/Seamoth.png\x27">';
     html+='<div class="creature-card-body">';
     html+='<h4>'+item.name+'</h4>';
@@ -1430,6 +1430,13 @@ function openVehicleExhibit(){
   grid.innerHTML=html;
   document.getElementById("vehicleExhibit").style.display="block";
   document.body.style.overflow="hidden";
+}
+
+function openVehicleDetail(id){
+  closeVehicleExhibit();
+  if(id==='seamoth') openSeamothExhibit();
+  else if(id==='prawn') openPrawnExhibit();
+  else if(id==='cyclops') openCyclopsExhibit();
 }
 
 function closeVehicleExhibit(){
