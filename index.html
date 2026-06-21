@@ -1598,6 +1598,29 @@ function toggleCardDetail(ev,cardEl,itemId){
 }
 
 
+// Flora image map
+const floraImgMap={
+acidmushroom:"Acid_Mushroom.png",bloodoil:"Blood_Oil.png",gelsack:"Gel_Sack.png",
+marblemelon:"Marblemelon.png",braincoral:"Brain_Coral.png",deepshroom:"Deep_Shroom.png",
+bulbotree:"Bulbo_Tree_Sample.png",chinesepotato:"Chinese_Potato_Plant.png",
+creepvine:"Creepvine.png",creepvineseed:"Creepvine_Seed_Cluster.png",
+bloodkelp:"Bloodvine.png",tablecoral:"Table_Coral.png",
+fungalsample:"Fungal_Sample.png",coralplate:"Coral_Shell_Plate.png",
+wrbush:"Wrinkle_Bush.png",fern:"Fern.png"
+};
+// Upgrade image map
+const upgradeImgMap={
+depth1:"Seamoth_Depth_Module_MK1.png",depth2:"Seamoth_Depth_Module_MK2.png",
+depth3:"Seamoth_Depth_Module_MK3.png",storage:"Storage_Module.png",
+perimeter:"Seamoth_Perimeter_Defense_System.png",torpedo:"Torpedo_System.png",
+sonar:"Seamoth_Sonar.png",solar:"Seamoth_Solar_Charger.png",
+drillarm:"Prawn_Suit_Drill_Arm.png",grapplearm:"Prawn_Suit_Grappling_Arm.png",
+jumpjet:"Prawn_Suit_Jump_Jet_Upgrade.png",thermal:"Prawn_Suit_Thermal_Reactor.png",
+shield:"Cyclops_Shield_Generator.png",fire:"Cyclops_Fire_Suppression_System.png",
+efficiency:"Engine_Efficiency_Module.png",hull:"Hull_Reinforcement.png",
+decoy:"Cyclops_Decoy_Tube_Upgrade.png",repairdock:"Cyclops_Thermal_Reactor_Module.png"
+};
+
 // ═══════════ Flora Data ═══════════
 const floraData={
 acidmushroom:{name:"酸蘑菇",desc:"常见于安全浅滩的荧光蘑菇。可采集酸性孢子用于制造电池。触碰会释放酸性灼伤，建议用刀采集。",habitat:"安全浅滩",use:"电池制作 · 酸性材料"},
@@ -1640,8 +1663,7 @@ const upgradesData=[
 {id:"repairdock",name:"停泊维修模块",cat:"独眼巨人号",desc:"在独眼巨人号停泊海蛾号或海虾号时自动维修。",vehicle:"独眼巨人号"}
 ];
 
-// Wiki image CDN helper
-function WIKI(name){ return "https://static.wikia.nocookie.net/subnautica/images/"+name; }
+
 
 // ═══════════ Flora Exhibit ═══════════
 function openFloraExhibit(){
@@ -1650,7 +1672,7 @@ function openFloraExhibit(){
   var html="";
   keys.forEach(function(id){
     var d=floraData[id];
-    var imgSrc=WIKI(id.replace(/ /g,"_")+".png");
+    var imgSrc="images/items/"+(floraImgMap[id]||(id+".png"));
     html+='<div class="creature-card" style="cursor:pointer">';
     html+='<img class="creature-card-img" src="'+imgSrc+'" alt="'+d.name+'" style="height:180px;cursor:zoom-in" onclick="showFloraImage(event,'+id+')" onerror="this.hidden=true">';
     html+='<div class="creature-card-body"><h4>'+d.name+'</h4>';
@@ -1672,7 +1694,7 @@ function showFloraImage(ev,id){
   ev.stopPropagation();
   var d=floraData[id];
   var lb=document.getElementById("lightbox");
-  document.getElementById("lightboxImg").src=WIKI(id.replace(/ /g,"_")+".png");
+  document.getElementById("lightboxImg").src="images/items/"+(floraImgMap[id]||(id+".png"));
   document.getElementById("lightboxCaption").innerHTML='<b style="color:var(--green)">'+d.name+'</b><br><span style="color:var(--text2);font-size:12px">'+d.habitat+'</span>';
   lb.classList.add("active");document.body.style.overflow="hidden";
 }
@@ -1683,7 +1705,7 @@ function openUpgradesExhibit(){
   var html="";
   upgradesData.forEach(function(d){
     var id=d.id; var name=d.name;
-    var imgSrc=WIKI(name.replace(/ /g,"_")+".png");
+    var imgSrc="images/items/"+(upgradeImgMap[d.id]||(name+".png"));
     html+='<div class="creature-card" style="cursor:pointer">';
     html+='<img class="creature-card-img" src="'+imgSrc+'" alt="'+name+'" style="height:180px;cursor:zoom-in" onclick="showUpgradeImage(event,'+id+')" onerror="this.hidden=true">';
     html+='<div class="creature-card-body"><h4>'+name+'</h4>';
@@ -1706,7 +1728,7 @@ function showUpgradeImage(ev,id){
   var d=upgradesData.find(function(x){return x.id===id});
   if(!d) return;
   var lb=document.getElementById("lightbox");
-  document.getElementById("lightboxImg").src=WIKI(d.name.replace(/ /g,"_")+".png");
+  document.getElementById("lightboxImg").src="images/items/"+(upgradeImgMap[d.id]||(d.name+".png"));
   document.getElementById("lightboxCaption").innerHTML='<b style="color:var(--orange)">'+d.name+'</b><br><span style="color:var(--text2);font-size:12px">'+d.vehicle+' · '+d.cat+'</span>';
   lb.classList.add("active");document.body.style.overflow="hidden";
 }
