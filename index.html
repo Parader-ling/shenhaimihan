@@ -1401,9 +1401,9 @@ function expandToolItem(id){
 
 // ═══════════ Vehicle Data ═══════════
 const vehicleData={
-seamoth:{desc:"单兵深海潜水器，Alterra最受欢迎的型号。灵活敏捷，适合侦察和快速移动。可升级深度模块至900m，配备周界防御系统后可抵御小型捕食者。",specs:"最大深度: 900m (MK3) | 速度: 12.5m/s | 动力: 动力电池×1 | 耐久: 300HP",upgrades:"深度模块 · 存储模块 · 周界防御 · 鱼雷系统 · 太阳能充电"},
-prawn:{desc:"深海外骨骼机甲，兼具力量与防护。可在海底行走、跳跃，配备钻臂和鱼雷臂后可对抗几乎所有威胁。1700m深度上限使其成为深海探索的终极选择。",specs:"最大深度: 1700m | 跳跃: 15m | 动力: 动力电池×2 | 耐久: 600HP",upgrades:"钻臂 · 鱼雷臂 · 抓取臂 · 跳跃升级 · 热反应堆"},
-cyclops:{desc:"移动海底基地，Alterra工程学的巅峰之作。全长54米，可搭载海蛾号或海虾号，配备声纳、护盾和灭火系统。是深海远航的终极旗舰。",specs:"最大深度: 1700m (MK3) | 速度: 8m/s | 动力: 动力电池×6 | 耐久: 1500HP",upgrades:"声纳 · 护盾发生器 · 灭火系统 · 热反应堆 · 深度模块 · 效率模块"}
+seamoth:{desc:"单兵深海潜水器，Alterra最受欢迎的型号。灵活敏捷，适合侦察和快速移动。可升级深度模块至900m，配备周界防御系统后可抵御小型捕食者。",specs:"最大深度: 900m | 速度: 12.5m/s | 动力: 动力电池×1 | 耐久: 300HP",size:"小型载具",tier:"★★★☆☆",upgrades:"深度模块 · 存储模块 · 周界防御 · 鱼雷系统 · 太阳能充电"},
+prawn:{desc:"深海外骨骼机甲，兼具力量与防护。可在海底行走、跳跃，配备钻臂和鱼雷臂后可对抗几乎所有威胁。1700m深度上限使其成为深海探索的终极选择。",specs:"最大深度: 1700m | 跳跃: 15m | 动力: 动力电池×2 | 耐久: 600HP",size:"中型机甲",tier:"★★★★☆",upgrades:"钻臂 · 鱼雷臂 · 抓取臂 · 跳跃升级 · 热反应堆"},
+cyclops:{desc:"移动海底基地，Alterra工程学的巅峰之作。全长54米，可搭载海蛾号或海虾号，配备声纳、护盾和灭火系统。是深海远航的终极旗舰。",specs:"最大深度: 1700m | 速度: 8m/s | 动力: 动力电池×6 | 耐久: 1500HP",size:"超大型潜艇",tier:"★★★★★",upgrades:"声纳 · 护盾发生器 · 灭火系统 · 热反应堆 · 深度模块 · 效率模块"}
 };
 
 function openVehicleExhibit(){
@@ -1411,18 +1411,17 @@ function openVehicleExhibit(){
   var items=craftingData.filter(function(d){return d.cat==="载具"});
   var html="";
   items.forEach(function(item){
-    var data=vehicleData[item.id]||{desc:"Alterra深海载具。",specs:"数据待补充",upgrades:"无"};
-    var stars=""; for(var i=0;i<(item.stars||0);i++) stars+="⭐";
+    var data=vehicleData[item.id]||{desc:"Alterra深海载具。",specs:"数据待补充",size:"未知",tier:"未知",upgrades:"无"};
     var imgFile=IMG_MAP[item.id]||(item.id+".svg");
     var imgSrc="images/items/"+imgFile;
-    html+='<div class="creature-card" style="grid-column:span 1">';
-    html+='<img class="creature-card-img" src="'+imgSrc+'" alt="'+item.name+'" style="height:220px" onerror="this.src=\x27images/items/Seamoth.png\x27">';
+    html+='<div class="creature-card" style="border-color:rgba(78,205,196,.3);border-width:2px">';
+    html+='<img class="creature-card-img" src="'+imgSrc+'" alt="'+item.name+'" style="height:240px" onerror="this.src=\x27images/items/Seamoth.png\x27">';
     html+='<div class="creature-card-body">';
-    html+='<h4>'+item.name+'</h4>';
-    html+='<div class="creature-stars">'+stars+'</div>';
+    html+='<h4>'+item.name+'<span style="display:inline-block;background:var(--teal);font-size:10px;padding:2px 10px;border-radius:10px;color:#000;margin-left:8px">'+data.tier+'</span></h4>';
     html+='<div class="creature-desc" style="font-size:13px">'+data.desc+'</div>';
-    html+='<div style="font-size:11px;color:var(--teal);margin:6px 0">📊 '+data.specs+'</div>';
+    html+='<div style="font-size:11px;color:var(--teal);margin:8px 0;padding:8px 12px;background:rgba(78,205,196,.06);border-radius:8px;line-height:1.6">📊 '+data.specs+'</div>';
     html+='<div class="creature-meta">';
+    html+='<span class="creature-tag" style="border-color:var(--teal);font-size:11px">📏 '+data.size+'</span>';
     var ups=data.upgrades.split(" · ");
     ups.forEach(function(u){html+='<span class="creature-tag">🔧 '+u+'</span>'});
     html+='</div></div></div>';
@@ -1589,10 +1588,10 @@ searchByCat=function(cat){
 <!-- Vehicle Exhibit -->
 <div id="vehicleExhibit">
   <button class="exhibit-close" onclick="closeVehicleExhibit()">✕</button>
-  <div class="creature-hero" style="background:linear-gradient(180deg,rgba(78,205,196,.15),rgba(2,10,20,.95))">
+  <div class="leviathan-hero" style="background:linear-gradient(180deg,rgba(10,40,60,.85),rgba(2,10,20,.97))">
     <div class="hero-title">
-      <div class="hero-sub">Alterra · 深海载具系统</div>
-      <h2>🚗 载 具 图 鉴</h2>
+      <div class="hero-sub" style="color:var(--teal)">Alterra · 深海载具系统</div>
+      <h2 style="text-shadow:0 0 50px var(--teal)">🚗 载 具 图 鉴</h2>
     </div>
   </div>
   <div class="creature-grid" id="vehicleGrid"></div>
