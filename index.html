@@ -1398,6 +1398,53 @@ function expandToolItem(id){
 }
 
 
+
+// ═══════════ Vehicle Data ═══════════
+const vehicleData={
+seamoth:{desc:"单兵深海潜水器，Alterra最受欢迎的型号。灵活敏捷，适合侦察和快速移动。可升级深度模块至900m，配备周界防御系统后可抵御小型捕食者。",specs:"最大深度: 900m (MK3) | 速度: 12.5m/s | 动力: 动力电池×1 | 耐久: 300HP",upgrades:"深度模块 · 存储模块 · 周界防御 · 鱼雷系统 · 太阳能充电"},
+prawn:{desc:"深海外骨骼机甲，兼具力量与防护。可在海底行走、跳跃，配备钻臂和鱼雷臂后可对抗几乎所有威胁。1700m深度上限使其成为深海探索的终极选择。",specs:"最大深度: 1700m | 跳跃: 15m | 动力: 动力电池×2 | 耐久: 600HP",upgrades:"钻臂 · 鱼雷臂 · 抓取臂 · 跳跃升级 · 热反应堆"},
+cyclops:{desc:"移动海底基地，Alterra工程学的巅峰之作。全长54米，可搭载海蛾号或海虾号，配备声纳、护盾和灭火系统。是深海远航的终极旗舰。",specs:"最大深度: 1700m (MK3) | 速度: 8m/s | 动力: 动力电池×6 | 耐久: 1500HP",upgrades:"声纳 · 护盾发生器 · 灭火系统 · 热反应堆 · 深度模块 · 效率模块"}
+};
+
+function openVehicleExhibit(){
+  var grid=document.getElementById("vehicleGrid");
+  var items=craftingData.filter(function(d){return d.cat==="载具"});
+  var html="";
+  items.forEach(function(item){
+    var data=vehicleData[item.id]||{desc:"Alterra深海载具。",specs:"数据待补充",upgrades:"无"};
+    var stars=""; for(var i=0;i<(item.stars||0);i++) stars+="⭐";
+    var imgFile=IMG_MAP[item.id]||(item.id+".svg");
+    var imgSrc="images/items/"+imgFile;
+    html+='<div class="creature-card" style="grid-column:span 1">';
+    html+='<img class="creature-card-img" src="'+imgSrc+'" alt="'+item.name+'" style="height:220px" onerror="this.src="images/items/Seamoth.png"">';
+    html+='<div class="creature-card-body">';
+    html+='<h4>'+item.name+'</h4>';
+    html+='<div class="creature-stars">'+stars+'</div>';
+    html+='<div class="creature-desc" style="font-size:13px">'+data.desc+'</div>';
+    html+='<div style="font-size:11px;color:var(--teal);margin:6px 0">📊 '+data.specs+'</div>';
+    html+='<div class="creature-meta">';
+    var ups=data.upgrades.split(" · ");
+    ups.forEach(function(u){html+='<span class="creature-tag">🔧 '+u+'</span>'});
+    html+='</div></div></div>';
+  });
+  grid.innerHTML=html;
+  document.getElementById("vehicleExhibit").style.display="block";
+  document.body.style.overflow="hidden";
+}
+
+function closeVehicleExhibit(){
+  document.getElementById("vehicleExhibit").style.display="none";
+  document.body.style.overflow="";
+}
+
+// Override searchByCat for 载具 too
+searchByCat=function(cat){
+  if(cat==="载具"){openVehicleExhibit();return}
+  if(cat==="生物"){openCreatureExhibit();return}
+  if(cat==="利维坦"){openLeviathanExhibit();return}
+  _origSearchByCat(cat);
+};
+
 // ═══════════ Creature & Leviathan Data ═══════════
 const creatureData={
 peeper:{desc:"4546B最常见的鱼类。大眼睛适合在昏暗水域观察，肉质鲜美，是早期生存的主要食物来源。性情温顺，群居于浅水区。",habitat:"安全浅滩 · 海藻森林",behavior:"温顺 · 群居",size:"小型"},
@@ -1498,6 +1545,7 @@ function closeLeviathanExhibit(){
 // Override searchByCat for 生物 and 利维坦
 var _origSearchByCat=searchByCat;
 searchByCat=function(cat){
+  if(cat==="载具"){openVehicleExhibit();return}
   if(cat==="生物"){openCreatureExhibit();return}
   if(cat==="利维坦"){openLeviathanExhibit();return}
   _origSearchByCat(cat);
@@ -1543,6 +1591,19 @@ searchByCat=function(cat){
     </div>
   </div>
   <div class="creature-grid" id="leviathanGrid"></div>
+</div>
+
+
+<!-- Vehicle Exhibit -->
+<div id="vehicleExhibit">
+  <button class="exhibit-close" onclick="closeVehicleExhibit()">✕</button>
+  <div class="creature-hero" style="background:linear-gradient(180deg,rgba(78,205,196,.15),rgba(2,10,20,.95))">
+    <div class="hero-title">
+      <div class="hero-sub">Alterra · 深海载具系统</div>
+      <h2>🚗 载 具 图 鉴</h2>
+    </div>
+  </div>
+  <div class="creature-grid" id="vehicleGrid"></div>
 </div>
 
 </body>
