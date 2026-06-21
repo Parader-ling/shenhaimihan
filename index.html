@@ -342,6 +342,15 @@ body::after{content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);
 .leviathan-hero .hero-title h2{font-size:48px;margin:0;letter-spacing:8px;color:#fff;text-shadow:0 0 40px var(--red)}
 .leviathan-hero .hero-sub{font-size:14px;color:var(--red);letter-spacing:4px;margin-bottom:8px}
 
+
+/* Expandable material detail */
+.creature-card .mat-detail{display:none;padding:10px 16px 14px;border-top:1px solid var(--border);background:rgba(0,0,0,.2);margin:8px -16px -14px;border-radius:0 0 14px 14px}
+.creature-card.expanded .mat-detail{display:block}
+.creature-card .mat-detail .mat-line{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2);padding:2px 0;flex-wrap:wrap}
+.creature-card .mat-detail .mat-name{font-weight:600;color:var(--warning)}
+.creature-card .mat-detail .mat-section{font-size:11px;font-weight:600;color:var(--teal);margin:4px 0 2px}
+.creature-card .mat-detail .src-tag{font-size:10px;padding:1px 7px;border-radius:10px;background:rgba(78,205,196,.1);color:var(--teal)}
+
 </style>
 </head>
 <body>
@@ -1459,7 +1468,7 @@ function openToolsExhibit(){
     var desc=toolDescs[item.id]||"Alterra深海工程工具。";
     var imgFile=IMG_MAP[item.id]||(item.id+".svg");
     var imgSrc="images/items/"+imgFile;
-    html+='<div class="creature-card" style="cursor:pointer" onclick="showToolImage(event,'+item.id+')">';
+    html+='<div class="creature-card" style="cursor:pointer" onclick="toggleCardDetail(event,this,'+item.id+')">';
     html+='<img class="creature-card-img" src="'+imgSrc+'" alt="'+item.name+'" style="height:180px;cursor:zoom-in" onclick="showToolImage(event,\x27'+item.id+'\x27)" onerror="this.src=\x27images/items/Scanner.png\x27">';
     html+='<div class="creature-card-body"><h4>'+item.name+'</h4>';
     html+='<div class="creature-stars">'+stars+'</div>';
@@ -1485,7 +1494,7 @@ function openBaseExhibit(){
     var desc=baseDescs[item.id]||"Alterra海底基地组件。";
     var imgFile=IMG_MAP[item.id]||(item.id+".svg");
     var imgSrc="images/items/"+imgFile;
-    html+='<div class="creature-card" style="cursor:pointer" onclick="showBaseImage(event,'+item.id+')">';
+    html+='<div class="creature-card" style="cursor:pointer" onclick="toggleCardDetail(event,this,'+item.id+')">';
     html+='<img class="creature-card-img" src="'+imgSrc+'" alt="'+item.name+'" style="height:180px;cursor:zoom-in" onclick="showBaseImage(event,\x27'+item.id+'\x27)" onerror="this.src=\x27images/items/Multipurpose_Room.png\x27">';
     html+='<div class="creature-card-body"><h4>'+item.name+'</h4>';
     html+='<div class="creature-stars">'+stars+'</div>';
@@ -1511,7 +1520,7 @@ function openGearExhibit(){
     var desc=toolDescs[item.id]||"深海生存必备装备。";
     var imgFile=IMG_MAP[item.id]||(item.id+".svg");
     var imgSrc="images/items/"+imgFile;
-    html+='<div class="creature-card" style="cursor:pointer" onclick="showGearImage(event,'+item.id+')">';
+    html+='<div class="creature-card" style="cursor:pointer" onclick="toggleCardDetail(event,this,'+item.id+')">';
     html+='<img class="creature-card-img" src="'+imgSrc+'" alt="'+item.name+'" style="height:180px;cursor:zoom-in" onclick="showGearImage(event,\x27'+item.id+'\x27)" onerror="this.src=\x27images/items/O2.png\x27">';
     html+='<div class="creature-card-body"><h4>'+item.name+'</h4>';
     html+='<div class="creature-stars">'+stars+'</div>';
@@ -1560,6 +1569,30 @@ function showGearImage(ev,id){
   document.getElementById("lightboxImg").onerror=function(){this.src="images/items/O2.png"};
   document.getElementById("lightboxCaption").innerHTML='<b style="color:var(--green)">'+(name||id)+'</b><br><span style="color:var(--text2);font-size:12px">'+desc.substring(0,80)+'</span>';
   lb.classList.add("active");document.body.style.overflow="hidden";
+}
+
+
+// Crafting detail toggle for exhibit cards
+function toggleCardDetail(ev,cardEl,itemId){
+  ev.stopPropagation();
+  var item=craftingData.find(function(d){return d.id===itemId});
+  if(!item||!item.materials) return;
+  var detail=cardEl.querySelector(".mat-detail");
+  if(!detail){
+    detail=document.createElement("div");
+    detail.className="mat-detail";
+    var html='<div class="mat-section">📦 合成配方</div>';
+    item.materials.forEach(function(m){
+      html+='<div class="mat-line">';
+      html+='<span class="mat-name">'+m.name+'</span>';
+      html+='<span style="color:var(--warning)">×'+m.qty+'</span>';
+      html+='<span style="font-size:10px;color:var(--text2)">🏠 '+(m.source||[]).join(", ")+' · 🔪 '+m.tool+'</span>';
+      html+='</div>';
+    });
+    detail.innerHTML=html;
+    cardEl.appendChild(detail);
+  }
+  cardEl.classList.toggle("expanded");
 }
 
 // ═══════════ Vehicle Data ═══════════
