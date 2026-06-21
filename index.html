@@ -1437,14 +1437,6 @@ function closeVehicleExhibit(){
   document.body.style.overflow="";
 }
 
-// Override searchByCat for 载具 too
-searchByCat=function(cat){
-  if(cat==="载具"){openVehicleExhibit();return}
-  if(cat==="生物"){openCreatureExhibit();return}
-  if(cat==="利维坦"){openLeviathanExhibit();return}
-  _origSearchByCat(cat);
-};
-
 // ═══════════ Creature & Leviathan Data ═══════════
 const creatureData={
 peeper:{desc:"4546B最常见的鱼类。大眼睛适合在昏暗水域观察，肉质鲜美，是早期生存的主要食物来源。性情温顺，群居于浅水区。",habitat:"安全浅滩 · 海藻森林",behavior:"温顺 · 群居",size:"小型"},
