@@ -317,6 +317,31 @@ body::after{content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);
 
 
 @keyframes toolPulse{0%,100%{box-shadow:0 0 20px rgba(78,205,196,.25),0 0 60px rgba(78,205,196,.1)}50%{box-shadow:0 0 35px rgba(78,205,196,.4),0 0 90px rgba(78,205,196,.2)}}
+
+/* Creature & Leviathan Exhibit */
+#creatureExhibit,#leviathanExhibit{display:none;position:fixed;inset:0;z-index:100;background:rgba(2,10,20,.97);overflow-y:auto;overflow-x:hidden}
+.creature-hero{position:relative;height:200px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(2,30,40,.8),rgba(2,10,20,.95))}
+.creature-hero .hero-title{text-align:center;z-index:2}
+.creature-hero .hero-title h2{font-size:42px;margin:0;letter-spacing:6px;color:#fff;text-shadow:0 0 30px var(--teal)}
+.creature-hero .hero-sub{font-size:13px;color:var(--teal);letter-spacing:3px;margin-bottom:8px}
+.creature-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;padding:20px 24px 40px;max-width:1100px;margin:0 auto}
+.creature-card{background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all .3s;cursor:default}
+.creature-card:hover{border-color:var(--teal);box-shadow:0 0 20px rgba(78,205,196,.1);transform:translateY(-2px)}
+.creature-card.danger{border-color:rgba(255,107,107,.3)}
+.creature-card.danger:hover{border-color:var(--red);box-shadow:0 0 25px rgba(255,107,107,.15)}
+.creature-card-img{width:100%;height:180px;object-fit:cover;background:rgba(0,0,0,.3)}
+.creature-card-body{padding:14px 16px}
+.creature-card-body h4{margin:0 0 4px;font-size:16px;color:var(--text);display:flex;align-items:center;gap:8px}
+.creature-card-body h4 .danger-badge{font-size:10px;background:var(--red);color:#fff;padding:2px 8px;border-radius:10px}
+.creature-card-body .creature-stars{font-size:11px;color:var(--gold);margin-bottom:6px}
+.creature-card-body .creature-desc{font-size:12px;color:var(--text2);line-height:1.5;margin-bottom:8px}
+.creature-card-body .creature-meta{display:flex;flex-wrap:wrap;gap:6px}
+.creature-card-body .creature-tag{font-size:10px;padding:3px 10px;border-radius:12px;background:rgba(78,205,196,.1);color:var(--teal);border:1px solid rgba(78,205,196,.2)}
+.creature-card-body .creature-tag.danger-tag{background:rgba(255,107,107,.1);color:var(--red);border-color:rgba(255,107,107,.2)}
+.leviathan-hero{position:relative;height:240px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(40,5,5,.8),rgba(2,10,20,.95))}
+.leviathan-hero .hero-title h2{font-size:48px;margin:0;letter-spacing:8px;color:#fff;text-shadow:0 0 40px var(--red)}
+.leviathan-hero .hero-sub{font-size:14px;color:var(--red);letter-spacing:4px;margin-bottom:8px}
+
 </style>
 </head>
 <body>
@@ -1372,6 +1397,112 @@ function expandToolItem(id){
   renderToolPanel();
 }
 
+
+// ═══════════ Creature & Leviathan Data ═══════════
+const creatureData={
+peeper:{desc:"4546B最常见的鱼类。大眼睛适合在昏暗水域观察，肉质鲜美，是早期生存的主要食物来源。性情温顺，群居于浅水区。",habitat:"安全浅滩 · 海藻森林",behavior:"温顺 · 群居",size:"小型"},
+bladderfish:{desc:"体内有气囊结构，可过滤海水产生淡水。是潜水员获取饮用水的关键生物，常见于浅滩区域的珊瑚裂隙中。",habitat:"安全浅滩",behavior:"温顺 · 独居",size:"小型"},
+boomerang:{desc:"身体扁平如回旋镖，以藻类和微生物为食。肉质有轻微毒性，但可加工成生物燃料。",habitat:"安全浅滩",behavior:"温顺 · 群居",size:"小型"},
+hoverfish:{desc:"靠气囊悬浮于水中，行动缓慢。被捕获时会发出可爱的咕噜声，是海底世界的萌物代表。",habitat:"海藻森林",behavior:"温顺 · 独居",size:"小型"},
+hoopfish:{desc:"身体呈环形中空，能快速收缩身体喷射推进。夜间会发出蓝色荧光，如深海精灵。",habitat:"安全浅滩",behavior:"温顺 · 群居",size:"小型"},
+garryfish:{desc:"身披银色鳞片，在水下灯光照射下如金属般闪亮。游速极快，很难用手直接捕捉。",habitat:"安全浅滩",behavior:"警觉 · 群居",size:"小型"},
+eyeye:{desc:"巨大的眼睛占据身体一半以上，能在近乎无光的环境下看清猎物。生活在深暗的蛇菇洞穴中。",habitat:"蛇菇洞",behavior:"温顺 · 独居",size:"小型"},
+rabbitray:{desc:"形似陆地上的兔子，以腹部贴地的方式在海底'跳跃'前进。背部的发光器官在求偶时发出柔和光芒。",habitat:"安全浅滩",behavior:"温顺 · 独居",size:"中型"},
+jellyray:{desc:"半透明的伞状身体笼罩着发光器官，在蛇菇洞的黑暗中如飘浮的幽灵。触手有微弱麻痹毒素。",habitat:"蛇菇洞",behavior:"温顺 · 群居",size:"中型"},
+ghostray:{desc:"通体透明如玻璃，在失落之河的绿色光雾中若隐若现。以浮游生物为食，完全无害。",habitat:"失落之河",behavior:"温顺 · 群居",size:"中型"},
+gasopod:{desc:"遇到威胁时会释放绿色毒气荚。毒气荚爆炸后形成大范围毒雾，对潜水员和捕食者都有伤害。",habitat:"安全浅滩",behavior:"防御型 · 独居",size:"中型"},
+crashfish:{desc:"栖息于安全浅滩的洞穴中。一旦感知到生物靠近，会以自爆方式攻击入侵者。务必保持距离！",habitat:"安全浅滩洞穴",behavior:"攻击型 · 自爆",size:"小型",danger:!0},
+stalker:{desc:"海藻森林的顶级捕食者。对金属碎片有异常的执着，会收集并囤积。可投喂金属碎片驯服。",habitat:"海藻森林",behavior:"攻击型 · 可驯服",size:"中型",danger:!0},
+sandshark:{desc:"潜伏在红色草原的沙层下，只露出背鳍。猎物经过时猛然跃出撕咬。移动时搅起大量沙尘。",habitat:"红色草原",behavior:"伏击型 · 领域性",size:"中型",danger:!0},
+boneshark:{desc:"坚硬的骨质外壳能抵抗大多数攻击。群体活动，会主动撞击小型载具。海蛾号的最大威胁之一。",habitat:"浮岛区",behavior:"攻击型 · 群居",size:"中型",danger:!0},
+ampeel:{desc:"身体覆盖发电器官，能在水中释放高压电击。栖息于血藻区，是海虾号操作者需要格外警惕的对手。",habitat:"血藻区",behavior:"攻击型 · 放电",size:"大型",danger:!0},
+crabsquid:{desc:"外形如螃蟹与鱿鱼的结合体，会发出电磁脉冲使电子设备瘫痪。对光线极为敏感，会攻击任何发光体。",habitat:"失落之河",behavior:"攻击型 · EMP",size:"大型",danger:!0},
+mesmer:{desc:"拥有催眠能力的危险生物。会发出彩色光纹迷惑猎物，使其不由自主地靠近。保持意志力，不要直视！",habitat:"海藻森林洞穴",behavior:"催眠型 · 独居",size:"小型",danger:!0},
+riverprowler:{desc:"失落之河的幽灵猎手，身体修长如带鱼。以惊人的速度在水中穿梭，追踪一切进入其领地的生物。",habitat:"失落之河",behavior:"攻击型 · 高速",size:"大型",danger:!0},
+lavalizard:{desc:"熔岩区的霸主生物之一。皮肤能承受1300°C高温，从口中喷射熔岩弹攻击入侵者。",habitat:"熔岩区",behavior:"攻击型 · 喷射",size:"大型",danger:!0},
+lavalarva:{desc:"熔岩蜥蜴的幼体形态，吸附在熔岩壁面上滤食火山矿物质。本身无害但大量聚集时会造成困扰。",habitat:"熔岩区",behavior:"温顺 · 群居",size:"小型"},
+reefback:{desc:"巨型温和生物，背上生长着完整的微型生态系统——珊瑚、海藻、藤壶共生其上。可采集背上的矿石资源。",habitat:"安全浅滩水面",behavior:"温顺 · 独居",size:"巨型"}
+};
+
+const leviathanData={
+reaper:{desc:"4546B星球的噩梦。镰刀状头骨和四条下颌骨能轻易粉碎海蛾号。其咆哮声在水下数公里外便能听到。见到请立即撤离。",habitat:"极光号周边 · 沙丘区",behavior:"极度攻击型 · 追击",size:"55m",threat:"★★★★★"},
+ghostlev:{desc:"半透明的巨型身躯在黑暗中发出幽蓝荧光。用头部撞击攻击，成体体长可达成年独眼巨人号。失落之河的守护者。",habitat:"失落之河 · 死火山区",behavior:"领域攻击型 · 撞击",size:"67m",threat:"★★★★★"},
+seadragon:{desc:"水下来自地狱的火焰巨龙。从口中喷射熔岩火球，前肢可抓取并投掷海虾号。栖息于最深处的熔岩湖。",habitat:"熔岩区 · 熔岩湖",behavior:"终极攻击型 · 火焰喷射",size:"112m",threat:"★★★★★"},
+emperor:{desc:"4546B星球的最后一只海皇。体型堪比山脉，拥有强大的心灵感应能力。孵化出的酶42是治愈卡拉病毒的唯解药。",habitat:"海皇监狱水族馆",behavior:"中性 · 心灵感应",size:"200m+",threat:"★☆☆☆☆（友善）"},
+shadowlev:{desc:"极寒深渊的终极捕食者。暗影般的躯体在冰冷的海水中几乎隐形，能瞬间将猎物压碎在深渊的永恒黑暗中。",habitat:"极寒深渊",behavior:"致命攻击 · 缠绕挤压",size:"60m",threat:"★★★★★"}
+};
+
+// ═══════════ Creature/Leviathan Exhibit Functions ═══════════
+function openCreatureExhibit(){
+  var grid=document.getElementById("creatureGrid");
+  var items=craftingData.filter(function(d){return d.cat==="生物"});
+  var html="";
+  items.forEach(function(item){
+    var data=creatureData[item.id]||{desc:"4546B星球的本土生物。",habitat:"未知",behavior:"未知",size:"未知"};
+    var stars=""; for(var i=0;i<(item.stars||0);i++) stars+="⭐";
+    var imgFile=IMG_MAP[item.id]||(item.id+".svg");
+    var imgSrc="images/items/"+imgFile;
+    var dCls=data.danger?" danger":"";
+    var dBadge=data.danger?"<span class=\"danger-badge\">⚠ 危险</span>":"";
+    html+='<div class="creature-card'+dCls+'">';
+    html+='<img class="creature-card-img" src="'+imgSrc+'" alt="'+item.name+'" onerror="this.src="images/items/Peeper.png"">';
+    html+='<div class="creature-card-body">';
+    html+='<h4>'+item.name+dBadge+'</h4>';
+    html+='<div class="creature-stars">'+stars+'</div>';
+    html+='<div class="creature-desc">'+data.desc+'</div>';
+    html+='<div class="creature-meta">';
+    html+='<span class="creature-tag">🏠 '+data.habitat+'</span>';
+    html+='<span class="creature-tag">🎯 '+data.behavior+'</span>';
+    html+='<span class="creature-tag">📏 '+data.size+'</span>';
+    html+='</div></div></div>';
+  });
+  grid.innerHTML=html;
+  document.getElementById("creatureExhibit").style.display="block";
+  document.body.style.overflow="hidden";
+}
+
+function closeCreatureExhibit(){
+  document.getElementById("creatureExhibit").style.display="none";
+  document.body.style.overflow="";
+}
+
+function openLeviathanExhibit(){
+  var grid=document.getElementById("leviathanGrid");
+  var items=craftingData.filter(function(d){return d.cat==="利维坦"});
+  var html="";
+  items.forEach(function(item){
+    var data=leviathanData[item.id]||{desc:"利维坦级巨型生物。",habitat:"未知",behavior:"未知",size:"未知",threat:"未知"};
+    var imgFile=IMG_MAP[item.id]||(item.id+".svg");
+    var imgSrc="images/items/"+imgFile;
+    html+='<div class="creature-card danger" style="grid-column:span 1">';
+    html+='<img class="creature-card-img" src="'+imgSrc+'" alt="'+item.name+'" style="height:220px" onerror="this.src="images/items/Reaper_Leviathan.png"">';
+    html+='<div class="creature-card-body">';
+    html+='<h4>'+item.name+'<span class="danger-badge">⚠ '+data.threat+'</span></h4>';
+    html+='<div class="creature-desc" style="font-size:13px">'+data.desc+'</div>';
+    html+='<div class="creature-meta">';
+    html+='<span class="creature-tag danger-tag">🏠 '+data.habitat+'</span>';
+    html+='<span class="creature-tag danger-tag">🎯 '+data.behavior+'</span>';
+    html+='<span class="creature-tag danger-tag">📏 '+data.size+'</span>';
+    html+='</div></div></div>';
+  });
+  grid.innerHTML=html;
+  document.getElementById("leviathanExhibit").style.display="block";
+  document.body.style.overflow="hidden";
+}
+
+function closeLeviathanExhibit(){
+  document.getElementById("leviathanExhibit").style.display="none";
+  document.body.style.overflow="";
+}
+
+// Override searchByCat for 生物 and 利维坦
+var _origSearchByCat=searchByCat;
+searchByCat=function(cat){
+  if(cat==="生物"){openCreatureExhibit();return}
+  if(cat==="利维坦"){openLeviathanExhibit();return}
+  _origSearchByCat(cat);
+};
+
 </script>
 
 <!-- ═══════════ Tool Intro Panel ═══════════ -->
@@ -1387,6 +1518,31 @@ function expandToolItem(id){
     <div class="tool-panel-tab" onclick="switchToolTab('生存装备',event)">🎒 装备</div>
   </div>
   <div class="tool-panel-list" id="toolPanelList"></div>
+</div>
+
+
+<!-- Creature Exhibit -->
+<div id="creatureExhibit">
+  <button class="exhibit-close" onclick="closeCreatureExhibit()">✕</button>
+  <div class="creature-hero">
+    <div class="hero-title">
+      <div class="hero-sub">4546B · 本土生物群</div>
+      <h2>🐟 生 物 图 鉴</h2>
+    </div>
+  </div>
+  <div class="creature-grid" id="creatureGrid"></div>
+</div>
+
+<!-- Leviathan Exhibit -->
+<div id="leviathanExhibit">
+  <button class="exhibit-close" onclick="closeLeviathanExhibit()">✕</button>
+  <div class="leviathan-hero">
+    <div class="hero-title">
+      <div class="hero-sub">⚠ 极度危险 · 保持距离</div>
+      <h2>💀 利 维 坦</h2>
+    </div>
+  </div>
+  <div class="creature-grid" id="leviathanGrid"></div>
 </div>
 
 </body>
