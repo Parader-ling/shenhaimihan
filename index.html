@@ -1368,7 +1368,7 @@ function renderToolPanel(){
     var imgSrc="images/items/"+imgFile;
     var expCls=expandedTool===item.id?" expanded":"";
     html.push('<div class="tool-item-wrap">');
-    html.push('<div class="tool-item'+expCls+'" onclick="expandToolItem(&quot;'+item.id+'&quot;)">');
+    html.push('<div class="tool-item'+expCls+'" onclick="expandToolItem(&quot;'+item.id+')">');
     html.push('<img class="tool-item-thumb" src="'+imgSrc+'" alt="'+item.name+'" onerror="this.hidden=true">');
     html.push('<div class="tool-item-info">');
     html.push('<div class="tool-item-name">'+item.name+'</div>');
@@ -1490,7 +1490,7 @@ function openCreatureExhibit(){
     var imgSrc="images/items/"+imgFile;
     var dCls=data.danger?" danger":"";
     var dBadge=data.danger?"<span class=\"danger-badge\">⚠ 危险</span>":"";
-    html+='<div class="creature-card'+dCls+'">';
+    html+='<div class="creature-card'+dCls+'" style="cursor:pointer" onclick="closeCreatureExhibit();openDetail('+item.id+')">';
     html+='<img class="creature-card-img" src="'+imgSrc+'" alt="'+item.name+'" onerror="this.src=\x27images/items/Peeper.png\x27">';
     html+='<div class="creature-card-body">';
     html+='<h4>'+item.name+dBadge+'</h4>';
@@ -1520,7 +1520,7 @@ function openLeviathanExhibit(){
     var data=leviathanData[item.id]||{desc:"利维坦级巨型生物。",habitat:"未知",behavior:"未知",size:"未知",threat:"未知"};
     var imgFile=IMG_MAP[item.id]||(item.id+".svg");
     var imgSrc="images/items/"+imgFile;
-    html+='<div class="creature-card danger" style="grid-column:span 1">';
+    html+='<div class="creature-card danger" style="grid-column:span 1;cursor:pointer" onclick="closeLeviathanExhibit();openDetail('+item.id+')">';
     html+='<img class="creature-card-img" src="'+imgSrc+'" alt="'+item.name+'" style="height:220px" onerror="this.src=\x27images/items/Reaper_Leviathan.png\x27">';
     html+='<div class="creature-card-body">';
     html+='<h4>'+item.name+'<span class="danger-badge">⚠ '+data.threat+'</span></h4>';
