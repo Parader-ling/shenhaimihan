@@ -319,7 +319,7 @@ body::after{content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);
 @keyframes toolPulse{0%,100%{box-shadow:0 0 20px rgba(78,205,196,.25),0 0 60px rgba(78,205,196,.1)}50%{box-shadow:0 0 35px rgba(78,205,196,.4),0 0 90px rgba(78,205,196,.2)}}
 
 /* Creature & Leviathan Exhibit */
-#creatureExhibit,#leviathanExhibit,#vehicleExhibit,#toolsExhibit,#baseExhibit,#gearExhibit{display:none;position:fixed;inset:0;z-index:100;background:rgba(2,10,20,.97);overflow-y:auto;overflow-x:hidden}
+#creatureExhibit,#leviathanExhibit,#vehicleExhibit,#toolsExhibit,#baseExhibit,#gearExhibit,#floraExhibit,#upgradesExhibit{display:none;position:fixed;inset:0;z-index:100;background:rgba(2,10,20,.97);overflow-y:auto;overflow-x:hidden}
 .creature-hero{position:relative;height:200px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(2,30,40,.8),rgba(2,10,20,.95))}
 .creature-hero .hero-title{text-align:center;z-index:2}
 .creature-hero .hero-title h2{font-size:42px;margin:0;letter-spacing:6px;color:#fff;text-shadow:0 0 30px var(--teal)}
@@ -1595,6 +1595,120 @@ function toggleCardDetail(ev,cardEl,itemId){
   cardEl.classList.toggle("expanded");
 }
 
+
+// ═══════════ Flora Data ═══════════
+const floraData={
+acidmushroom:{name:"酸蘑菇",desc:"常见于安全浅滩的荧光蘑菇。可采集酸性孢子用于制造电池。触碰会释放酸性灼伤，建议用刀采集。",habitat:"安全浅滩",use:"电池制作 · 酸性材料"},
+creepvine:{name:"海藻藤",desc:"海藻森林的标志性植物，长长的藤蔓上附有发光种子。种子可制作润滑剂和硅胶。",habitat:"海藻森林",use:"润滑剂 · 硅胶 · 纤维"},
+creepvineseed:{name:"海藻种子簇",desc:"海藻藤的发光种子，富含有机物质。是制作润滑剂和生物燃料的重要原料。",habitat:"海藻森林",use:"润滑剂 · 灯油"},
+bloodkelp:{name:"血藻",desc:"生长于血藻区的深红色海藻，根部吸附在岩石上。提取的血油是高级合成材料。",habitat:"血藻区",use:"血油 · 苯 · 高级合成"},
+bloodoil:{name:"血油",desc:"从血藻中提取的暗红色油状液体。用于制作苯和其他高级化学品。",habitat:"血藻区",use:"苯 · 高级材料"},
+gelsack:{name:"凝胶球",desc:"透明的凝胶状植物，内含丰富的有机质。可食用，也可用于制作高级材料。",habitat:"蛇菇洞 · 失落之河",use:"食物 · 高级合成"},
+deepshroom:{name:"深海蘑菇",desc:"只在深海洞穴中生长的稀有菌类。含有独特的酶，是高级药物的关键成分。",habitat:"蛇菇洞 · 失落之河",use:"药物 · 盐酸"},
+marblemelon:{name:"大理石瓜",desc:"在浮岛上发现的可食用植物，营养丰富。可在基地内种植，是最佳的食物来源。",habitat:"浮岛",use:"食物 · 种植"},
+chinesepotato:{name:"中国土豆",desc:"来自Degasi幸存者的可食用植物，生长快速产量高。适合基地温室栽培。",habitat:"浮岛",use:"食物 · 种植"},
+bulbotree:{name:"球茎树",desc:"浮岛的标志性树木，可采集球茎样本。样本可食用也可种植。",habitat:"浮岛",use:"食物 · 种植 · 装饰"},
+braincoral:{name:"脑珊瑚",desc:"形似大脑的硬质珊瑚，敲碎可获得珊瑚样本。用于制作计算机芯片等电子元件。",habitat:"安全浅滩 · 各处",use:"珊瑚样本 · 电子元件"},
+tablecoral:{name:"桌珊瑚",desc:"扁平如桌面的珊瑚结构，色彩鲜艳。采集后可获得珊瑚样本用于制作。",habitat:"安全浅滩 · 各处",use:"珊瑚样本"},
+fungalsample:{name:"真菌样本",desc:"从各类蘑菇和菌类中提取的样本。是制作药物和化学品的必要材料。",habitat:"各处洞穴",use:"药物 · 化学品"},
+coralplate:{name:"珊瑚板",desc:"大型珊瑚壳结构，敲碎后获得珊瑚壳板。用于加固和建造。",habitat:"安全浅滩",use:"建造材料"},
+wrbush:{name:"皱纹灌木",desc:"生长在红色草原的小型灌木。可采集种子用于生物燃料。",habitat:"红色草原",use:"生物燃料 · 种子"},
+fern:{name:"蕨类植物",desc:"海底各处常见的绿色蕨类，是最基础的海底植被。",habitat:"各处",use:"装饰 · 基础材料"}
+};
+
+// ═══════════ Upgrades Data ═══════════
+const upgradesData=[
+{id:"depth1",name:"深度模块 MK1",cat:"通用",desc:"将载具最大安全深度提升至300米。所有深海探索的起点。",vehicle:"海蛾号 · 独眼巨人号"},
+{id:"depth2",name:"深度模块 MK2",cat:"通用",desc:"进一步提升深度等级至500米。解锁失落之河的勘探。",vehicle:"海蛾号 · 海虾号 · 独眼巨人"},
+{id:"depth3",name:"深度模块 MK3",cat:"通用",desc:"终极深度升级。海蛾号900m，海虾/独眼巨人1700m。",vehicle:"海蛾号 · 海虾号 · 独眼巨人"},
+{id:"storage",name:"存储模块",cat:"海蛾号",desc:"在海蛾号上增加额外的储物空间。探索时可携带更多资源。",vehicle:"海蛾号 · 海虾号"},
+{id:"perimeter",name:"周界防御系统",cat:"海蛾号",desc:"释放高压电击脉冲，驱散附着和攻击海蛾号的生物。",vehicle:"海蛾号"},
+{id:"torpedo",name:"鱼雷系统",cat:"海蛾号",desc:"发射小型鱼雷攻击目标。可装填涡流鱼雷或毒气鱼雷。",vehicle:"海蛾号 · 海虾号"},
+{id:"sonar",name:"声纳系统",cat:"通用",desc:"发射声波扫描周围地形和生物。在黑暗和浑浊水域中不可或缺。",vehicle:"海蛾号 · 独眼巨人号"},
+{id:"solar",name:"太阳能充电器",cat:"海蛾号",desc:"利用阳光为海蛾号充电。在浅水区几乎无需换电池。",vehicle:"海蛾号"},
+{id:"drillarm",name:"钻臂",cat:"海虾号",desc:"海虾号专用钻探臂。可开采大型矿石资源如钻石和锂。",vehicle:"海虾号"},
+{id:"grapplearm",name:"抓取臂",cat:"海虾号",desc:"发射抓钩快速移动或抓取小型生物。大幅提升机动性。",vehicle:"海虾号"},
+{id:"jumpjet",name:"跳跃喷射升级",cat:"海虾号",desc:"增强海虾号推进器，跳跃高度和速度大幅提升。",vehicle:"海虾号"},
+{id:"thermal",name:"热反应堆模块",cat:"通用",desc:"利用高温环境自动为载具充电。在熔岩区几乎无限电力。",vehicle:"海虾号 · 独眼巨人号"},
+{id:"shield",name:"护盾发生器",cat:"独眼巨人号",desc:"生成临时能量护盾，抵御一切外部攻击。消耗大量电力。",vehicle:"独眼巨人号"},
+{id:"fire",name:"灭火系统",cat:"独眼巨人号",desc:"自动检测并扑灭独眼巨人号内部的火灾。防止引擎过热爆炸。",vehicle:"独眼巨人号"},
+{id:"efficiency",name:"引擎效率模块",cat:"通用",desc:"降低载具引擎能耗，延长电池使用时间。",vehicle:"海蛾号 · 独眼巨人号"},
+{id:"hull",name:"船体加固模块",cat:"通用",desc:"提升载具结构强度，减少碰撞和攻击造成的伤害。",vehicle:"海蛾号 · 海虾号"},
+{id:"decoy",name:"诱饵发射器",cat:"独眼巨人号",desc:"发射诱饵弹吸引敌对生物注意力，为撤离争取时间。",vehicle:"独眼巨人号"},
+{id:"repairdock",name:"停泊维修模块",cat:"独眼巨人号",desc:"在独眼巨人号停泊海蛾号或海虾号时自动维修。",vehicle:"独眼巨人号"}
+];
+
+// Wiki image CDN helper
+function WIKI(name){ return "https://static.wikia.nocookie.net/subnautica/images/"+name; }
+
+// ═══════════ Flora Exhibit ═══════════
+function openFloraExhibit(){
+  var grid=document.getElementById("floraGrid");
+  var keys=Object.keys(floraData);
+  var html="";
+  keys.forEach(function(id){
+    var d=floraData[id];
+    var imgSrc=WIKI(id.replace(/ /g,"_")+".png");
+    html+='<div class="creature-card" style="cursor:pointer">';
+    html+='<img class="creature-card-img" src="'+imgSrc+'" alt="'+d.name+'" style="height:180px;cursor:zoom-in" onclick="showFloraImage(event,'+id+')" onerror="this.hidden=true">';
+    html+='<div class="creature-card-body"><h4>'+d.name+'</h4>';
+    html+='<div class="creature-desc">'+d.desc+'</div>';
+    html+='<div class="creature-meta">';
+    html+='<span class="creature-tag" style="border-color:var(--green)">🏠 '+d.habitat+'</span>';
+    html+='<span class="creature-tag">🔧 '+d.use+'</span>';
+    html+='</div></div></div>';
+  });
+  grid.innerHTML=html;
+  document.getElementById("floraExhibit").style.display="block";
+  document.body.style.overflow="hidden";
+}
+function closeFloraExhibit(){
+  document.getElementById("floraExhibit").style.display="none";
+  document.body.style.overflow="";
+}
+function showFloraImage(ev,id){
+  ev.stopPropagation();
+  var d=floraData[id];
+  var lb=document.getElementById("lightbox");
+  document.getElementById("lightboxImg").src=WIKI(id.replace(/ /g,"_")+".png");
+  document.getElementById("lightboxCaption").innerHTML='<b style="color:var(--green)">'+d.name+'</b><br><span style="color:var(--text2);font-size:12px">'+d.habitat+'</span>';
+  lb.classList.add("active");document.body.style.overflow="hidden";
+}
+
+// ═══════════ Upgrades Exhibit ═══════════
+function openUpgradesExhibit(){
+  var grid=document.getElementById("upgradesGrid");
+  var html="";
+  upgradesData.forEach(function(d){
+    var id=d.id; var name=d.name;
+    var imgSrc=WIKI(name.replace(/ /g,"_")+".png");
+    html+='<div class="creature-card" style="cursor:pointer">';
+    html+='<img class="creature-card-img" src="'+imgSrc+'" alt="'+name+'" style="height:180px;cursor:zoom-in" onclick="showUpgradeImage(event,'+id+')" onerror="this.hidden=true">';
+    html+='<div class="creature-card-body"><h4>'+name+'</h4>';
+    html+='<div class="creature-desc">'+d.desc+'</div>';
+    html+='<div class="creature-meta">';
+    html+='<span class="creature-tag" style="border-color:var(--orange)">🚗 '+d.vehicle+'</span>';
+    html+='<span class="creature-tag">📦 '+d.cat+'</span>';
+    html+='</div></div></div>';
+  });
+  grid.innerHTML=html;
+  document.getElementById("upgradesExhibit").style.display="block";
+  document.body.style.overflow="hidden";
+}
+function closeUpgradesExhibit(){
+  document.getElementById("upgradesExhibit").style.display="none";
+  document.body.style.overflow="";
+}
+function showUpgradeImage(ev,id){
+  ev.stopPropagation();
+  var d=upgradesData.find(function(x){return x.id===id});
+  if(!d) return;
+  var lb=document.getElementById("lightbox");
+  document.getElementById("lightboxImg").src=WIKI(d.name.replace(/ /g,"_")+".png");
+  document.getElementById("lightboxCaption").innerHTML='<b style="color:var(--orange)">'+d.name+'</b><br><span style="color:var(--text2);font-size:12px">'+d.vehicle+' · '+d.cat+'</span>';
+  lb.classList.add("active");document.body.style.overflow="hidden";
+}
+
 // ═══════════ Vehicle Data ═══════════
 const vehicleData={
 seamoth:{desc:"单兵深海潜水器，Alterra最受欢迎的型号。灵活敏捷，适合侦察和快速移动。可升级深度模块至900m，配备周界防御系统后可抵御小型捕食者。",specs:"最大深度: 900m (MK3) | 速度: 12.5m/s | 动力: 动力电池×1 | 耐久: 300HP",upgrades:"深度模块 · 存储模块 · 周界防御 · 鱼雷系统 · 太阳能充电"},
@@ -1745,6 +1859,8 @@ searchByCat=function(cat){
   if(cat==="基地模块"){openBaseExhibit();return}
   if(cat==="生存装备"){openGearExhibit();return}
   if(cat==="生物"){openCreatureExhibit();return}
+  if(cat==="植物"){openFloraExhibit();return}
+  if(cat==="升级模块"){openUpgradesExhibit();return}
   if(cat==="利维坦"){openLeviathanExhibit();return}
   _origSearchByCat(cat);
 };
@@ -1830,6 +1946,25 @@ searchByCat=function(cat){
     <div class="hero-title"><div class="hero-sub">Alterra · 生存保障系统</div><h2>🎒 生 存 装 备</h2></div>
   </div>
   <div class="creature-grid" id="gearGrid"></div>
+</div>
+
+
+<!-- Flora Exhibit -->
+<div id="floraExhibit">
+  <button class="exhibit-close" onclick="closeFloraExhibit()">✕</button>
+  <div class="creature-hero" style="background:linear-gradient(180deg,rgba(100,196,78,.15),rgba(2,10,20,.95))">
+    <div class="hero-title"><div class="hero-sub">4546B · 本土植物群</div><h2>🌿 植 物 图 鉴</h2></div>
+  </div>
+  <div class="creature-grid" id="floraGrid"></div>
+</div>
+
+<!-- Upgrades Exhibit -->
+<div id="upgradesExhibit">
+  <button class="exhibit-close" onclick="closeUpgradesExhibit()">✕</button>
+  <div class="creature-hero" style="background:linear-gradient(180deg,rgba(196,120,78,.15),rgba(2,10,20,.95))">
+    <div class="hero-title"><div class="hero-sub">Alterra · 科技升级系统</div><h2>⚡ 升 级 模 块</h2></div>
+  </div>
+  <div class="creature-grid" id="upgradesGrid"></div>
 </div>
 
 </body>
