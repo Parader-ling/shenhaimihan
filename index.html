@@ -284,9 +284,9 @@ body::after{content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);
 .cat-card.leviathan-card:hover{border-color:#ff4444;box-shadow:0 0 35px rgba(255,107,107,.4)}
 .cat-card.leviathan-card .label{color:var(--red)}
 /* ═══════════ Tool Intro Panel ═══════════ */
-.tool-toggle{position:fixed;right:12px;top:72%;z-index:50;width:44px;height:44px;border-radius:50%;background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--border);color:var(--teal);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .35s;box-shadow:0 0 15px rgba(78,205,196,.15)}
-.tool-toggle:hover{background:rgba(78,205,196,.15);box-shadow:0 0 25px rgba(78,205,196,.35);transform:scale(1.05)}
-.tool-toggle.open{right:302px}
+.tool-toggle{position:fixed;right:20px;bottom:28px;z-index:60;width:56px;height:56px;border-radius:50%;background:rgba(78,205,196,.12);backdrop-filter:blur(16px);border:2px solid var(--teal);color:var(--teal);font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .35s;box-shadow:0 0 20px rgba(78,205,196,.25),0 0 60px rgba(78,205,196,.1);animation:toolPulse 2.5s ease-in-out infinite}
+.tool-toggle:hover{background:rgba(78,205,196,.25);box-shadow:0 0 30px rgba(78,205,196,.5),0 0 80px rgba(78,205,196,.2);transform:scale(1.1);border-color:#fff}
+.tool-toggle.open{right:310px;box-shadow:0 0 10px rgba(78,205,196,.1)}
 .tool-panel{position:fixed;right:-320px;top:8%;bottom:8%;width:300px;z-index:48;background:rgba(2,10,22,.92);backdrop-filter:blur(18px);border:1px solid var(--border);border-right:none;border-radius:16px 0 0 16px;overflow-y:auto;overflow-x:hidden;transition:right .4s cubic-bezier(.4,0,.2,1);box-shadow:-4px 0 30px rgba(0,0,0,.4)}
 .tool-panel.show{right:0}
 .tool-panel::-webkit-scrollbar{width:4px}
@@ -315,6 +315,8 @@ body::after{content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);
 .tool-item-detail .mat-label{font-weight:600;color:var(--warning)}
 .tool-item-source{font-size:10px;color:var(--text2);margin-top:5px}
 
+
+@keyframes toolPulse{0%,100%{box-shadow:0 0 20px rgba(78,205,196,.25),0 0 60px rgba(78,205,196,.1)}50%{box-shadow:0 0 35px rgba(78,205,196,.4),0 0 90px rgba(78,205,196,.2)}}
 </style>
 </head>
 <body>
