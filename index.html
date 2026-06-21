@@ -284,9 +284,9 @@ body::after{content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);
 .cat-card.leviathan-card:hover{border-color:#ff4444;box-shadow:0 0 35px rgba(255,107,107,.4)}
 .cat-card.leviathan-card .label{color:var(--red)}
 /* ═══════════ Tool Intro Panel ═══════════ */
-.tool-toggle{position:fixed;right:20px;bottom:28px;z-index:60;width:56px;height:56px;border-radius:50%;background:rgba(78,205,196,.12);backdrop-filter:blur(16px);border:2px solid var(--teal);color:var(--teal);font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .35s;box-shadow:0 0 20px rgba(78,205,196,.25),0 0 60px rgba(78,205,196,.1);animation:toolPulse 2.5s ease-in-out infinite}
-.tool-toggle:hover{background:rgba(78,205,196,.25);box-shadow:0 0 30px rgba(78,205,196,.5),0 0 80px rgba(78,205,196,.2);transform:scale(1.1);border-color:#fff}
-.tool-toggle.open{right:310px;box-shadow:0 0 10px rgba(78,205,196,.1)}
+.tool-toggle{width:38px;height:38px;border-radius:50%;background:rgba(78,205,196,.1);border:1.5px solid var(--teal);color:var(--teal);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .35s;flex-shrink:0;margin-left:auto;animation:toolPulse 2.5s ease-in-out infinite}
+.tool-toggle:hover{background:rgba(78,205,196,.2);box-shadow:0 0 15px rgba(78,205,196,.4);transform:scale(1.05)}
+.tool-toggle.open{box-shadow:0 0 10px rgba(78,205,196,.2)}
 .tool-panel{position:fixed;right:-320px;top:8%;bottom:8%;width:300px;z-index:48;background:rgba(2,10,22,.92);backdrop-filter:blur(18px);border:1px solid var(--border);border-right:none;border-radius:16px 0 0 16px;overflow-y:auto;overflow-x:hidden;transition:right .4s cubic-bezier(.4,0,.2,1);box-shadow:-4px 0 30px rgba(0,0,0,.4)}
 .tool-panel.show{right:0}
 .tool-panel::-webkit-scrollbar{width:4px}
@@ -344,7 +344,7 @@ body::after{content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);
   <button class="fab-item" onclick="reverseLookup()" title="反向查询">🔄</button>
 </div>
 <div id="home" class="page active">
-  <div class="header"><img class="logo" src="images/seamoth.svg"><h1>深海迷航·合成工坊</h1></div>
+  <div class="header"><img class="logo" src="images/seamoth.svg"><h1>深海迷航·合成工坊</h1><button class="tool-toggle" id="toolToggle" onclick="toggleToolPanel()" title="道具图鉴">📋</button></div>
   <div class="content">
     <div class="search-wrap">
       <span class="s-icon">🔍</span>
@@ -1375,7 +1375,7 @@ function expandToolItem(id){
 </script>
 
 <!-- ═══════════ Tool Intro Panel ═══════════ -->
-<button class="tool-toggle" id="toolToggle" onclick="toggleToolPanel()" title="道具介绍">📋</button>
+
 <div class="tool-panel" id="toolPanel">
   <div class="tool-panel-header">
     <h3>📋 道具图鉴</h3>
