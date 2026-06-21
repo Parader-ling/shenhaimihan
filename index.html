@@ -319,7 +319,7 @@ body::after{content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);
 @keyframes toolPulse{0%,100%{box-shadow:0 0 20px rgba(78,205,196,.25),0 0 60px rgba(78,205,196,.1)}50%{box-shadow:0 0 35px rgba(78,205,196,.4),0 0 90px rgba(78,205,196,.2)}}
 
 /* Creature & Leviathan Exhibit */
-#creatureExhibit,#leviathanExhibit,#vehicleExhibit{display:none;position:fixed;inset:0;z-index:100;background:rgba(2,10,20,.97);overflow-y:auto;overflow-x:hidden}
+#creatureExhibit,#leviathanExhibit,#vehicleExhibit,#toolsExhibit,#baseExhibit,#gearExhibit{display:none;position:fixed;inset:0;z-index:100;background:rgba(2,10,20,.97);overflow-y:auto;overflow-x:hidden}
 .creature-hero{position:relative;height:200px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(2,30,40,.8),rgba(2,10,20,.95))}
 .creature-hero .hero-title{text-align:center;z-index:2}
 .creature-hero .hero-title h2{font-size:42px;margin:0;letter-spacing:6px;color:#fff;text-shadow:0 0 30px var(--teal)}
@@ -1432,6 +1432,136 @@ function expandToolItem(id){
 
 
 
+
+// ═══════════ Base Module Descriptions ═══════════
+const baseDescs={
+room:"基础圆形房间，海底基地的核心单元。可在内部安装设备、储物柜和工作台。多个房间可通过走廊连接形成大型基地。",
+hatch:"密封舱门，进出基地的唯一通道。配备压力平衡系统，确保在不同深度下安全开关。",
+foundation:"加固地基平台，提高基地结构完整性。放置在基地下方可增加整体耐久度，防止水压造成的结构损伤。",
+corridor:"I形连接走廊，用于连接不同的基地房间。直线型设计，也可作为小型通道和过渡空间。",
+scannerroom:"配备远程扫描无人机的高科技房间。可扫描周围区域的地形、资源和生物，是深海勘探的核心设施。",
+moonpool:"载具停泊和充电平台。海蛾号和海虾号可驶入月池进行维修、充电和升级模块更换。",
+observatory:"全透明玻璃穹顶瞭望台。360度全景视野，让你在安全的环境中欣赏深海的壮丽景色。",
+bioreactor:"生物质能源反应堆。将有机物（鱼类、植物）转化为基地电力，是早期最实用的能源方案。",
+aliencontain:"大型水族箱，可养殖捕获的鱼类和生物。观察和研究4546B星球的生态系统，也可作为食物储备。",
+nuclear:"核反应堆，提供最强大的能源输出。消耗铀棒产生大量电力，适合大型基地的高能耗需求。",
+waterfilt:"海水净化装置。利用反渗透技术从海水中提取纯净饮用水，是长期生存的必备设施。",
+powertrans:"电力传输器，将远程电源（如热反应堆）的电力无线传输到基地。连接距离有限的能源到主基地。"
+};
+
+// ═══════════ Tools Exhibit ═══════════
+function openToolsExhibit(){
+  var grid=document.getElementById("toolsGrid");
+  var items=craftingData.filter(function(d){return d.cat==="工具"});
+  var html="";
+  items.forEach(function(item){
+    var stars=""; for(var i=0;i<(item.stars||0);i++) stars+="⭐";
+    var desc=toolDescs[item.id]||"Alterra深海工程工具。";
+    var imgFile=IMG_MAP[item.id]||(item.id+".svg");
+    var imgSrc="images/items/"+imgFile;
+    html+='<div class="creature-card" style="cursor:pointer" onclick="showToolImage(event,'+item.id+')">';
+    html+='<img class="creature-card-img" src="'+imgSrc+'" alt="'+item.name+'" style="height:180px" onerror="this.src=\x27images/items/Scanner.png\x27">';
+    html+='<div class="creature-card-body"><h4>'+item.name+'</h4>';
+    html+='<div class="creature-stars">'+stars+'</div>';
+    html+='<div class="creature-desc">'+desc.substring(0,50)+'...</div>';
+    html+='</div></div>';
+  });
+  grid.innerHTML=html;
+  document.getElementById("toolsExhibit").style.display="block";
+  document.body.style.overflow="hidden";
+}
+function closeToolsExhibit(){
+  document.getElementById("toolsExhibit").style.display="none";
+  document.body.style.overflow="";
+}
+
+// ═══════════ Base Exhibit ═══════════
+function openBaseExhibit(){
+  var grid=document.getElementById("baseGrid");
+  var items=craftingData.filter(function(d){return d.cat==="基地模块"});
+  var html="";
+  items.forEach(function(item){
+    var stars=""; for(var i=0;i<(item.stars||0);i++) stars+="⭐";
+    var desc=baseDescs[item.id]||"Alterra海底基地组件。";
+    var imgFile=IMG_MAP[item.id]||(item.id+".svg");
+    var imgSrc="images/items/"+imgFile;
+    html+='<div class="creature-card" style="cursor:pointer" onclick="showBaseImage(event,'+item.id+')">';
+    html+='<img class="creature-card-img" src="'+imgSrc+'" alt="'+item.name+'" style="height:180px" onerror="this.src=\x27images/items/Multipurpose_Room.png\x27">';
+    html+='<div class="creature-card-body"><h4>'+item.name+'</h4>';
+    html+='<div class="creature-stars">'+stars+'</div>';
+    html+='<div class="creature-desc">'+desc.substring(0,50)+'...</div>';
+    html+='</div></div>';
+  });
+  grid.innerHTML=html;
+  document.getElementById("baseExhibit").style.display="block";
+  document.body.style.overflow="hidden";
+}
+function closeBaseExhibit(){
+  document.getElementById("baseExhibit").style.display="none";
+  document.body.style.overflow="";
+}
+
+// ═══════════ Gear Exhibit ═══════════
+function openGearExhibit(){
+  var grid=document.getElementById("gearGrid");
+  var items=craftingData.filter(function(d){return d.cat==="生存装备"});
+  var html="";
+  items.forEach(function(item){
+    var stars=""; for(var i=0;i<(item.stars||0);i++) stars+="⭐";
+    var desc=toolDescs[item.id]||"深海生存必备装备。";
+    var imgFile=IMG_MAP[item.id]||(item.id+".svg");
+    var imgSrc="images/items/"+imgFile;
+    html+='<div class="creature-card" style="cursor:pointer" onclick="showGearImage(event,'+item.id+')">';
+    html+='<img class="creature-card-img" src="'+imgSrc+'" alt="'+item.name+'" style="height:180px" onerror="this.src=\x27images/items/O2.png\x27">';
+    html+='<div class="creature-card-body"><h4>'+item.name+'</h4>';
+    html+='<div class="creature-stars">'+stars+'</div>';
+    html+='<div class="creature-desc">'+desc.substring(0,50)+'...</div>';
+    html+='</div></div>';
+  });
+  grid.innerHTML=html;
+  document.getElementById("gearExhibit").style.display="block";
+  document.body.style.overflow="hidden";
+}
+function closeGearExhibit(){
+  document.getElementById("gearExhibit").style.display="none";
+  document.body.style.overflow="";
+}
+
+// Tool/Base/Gear Image Viewers
+function showToolImage(ev,id){
+  ev.stopPropagation();
+  var imgFile=IMG_MAP[id]||(id+".svg");
+  var desc=toolDescs[id]||"深海工具";
+  var name=""; craftingData.forEach(function(d){if(d.id===id) name=d.name});
+  var lb=document.getElementById("lightbox");
+  document.getElementById("lightboxImg").src="images/items/"+imgFile;
+  document.getElementById("lightboxImg").onerror=function(){this.src="images/items/Scanner.png"};
+  document.getElementById("lightboxCaption").innerHTML='<b style="color:var(--teal)">'+(name||id)+'</b><br><span style="color:var(--text2);font-size:12px">'+desc.substring(0,80)+'</span>';
+  lb.classList.add("active");document.body.style.overflow="hidden";
+}
+function showBaseImage(ev,id){
+  ev.stopPropagation();
+  var imgFile=IMG_MAP[id]||(id+".svg");
+  var desc=baseDescs[id]||"基地模块";
+  var name=""; craftingData.forEach(function(d){if(d.id===id) name=d.name});
+  var lb=document.getElementById("lightbox");
+  document.getElementById("lightboxImg").src="images/items/"+imgFile;
+  document.getElementById("lightboxImg").onerror=function(){this.src="images/items/Multipurpose_Room.png"};
+  document.getElementById("lightboxCaption").innerHTML='<b style="color:var(--gold)">'+(name||id)+'</b><br><span style="color:var(--text2);font-size:12px">'+desc.substring(0,80)+'</span>';
+  lb.classList.add("active");document.body.style.overflow="hidden";
+}
+function showGearImage(ev,id){
+  ev.stopPropagation();
+  var imgFile=IMG_MAP[id]||(id+".svg");
+  var desc=toolDescs[id]||"生存装备";
+  var name=""; craftingData.forEach(function(d){if(d.id===id) name=d.name});
+  var lb=document.getElementById("lightbox");
+  document.getElementById("lightboxImg").src="images/items/"+imgFile;
+  document.getElementById("lightboxImg").onerror=function(){this.src="images/items/O2.png"};
+  document.getElementById("lightboxCaption").innerHTML='<b style="color:var(--green)">'+(name||id)+'</b><br><span style="color:var(--text2);font-size:12px">'+desc.substring(0,80)+'</span>';
+  lb.classList.add("active");document.body.style.overflow="hidden";
+}
+
 // ═══════════ Vehicle Data ═══════════
 const vehicleData={
 seamoth:{desc:"单兵深海潜水器，Alterra最受欢迎的型号。灵活敏捷，适合侦察和快速移动。可升级深度模块至900m，配备周界防御系统后可抵御小型捕食者。",specs:"最大深度: 900m (MK3) | 速度: 12.5m/s | 动力: 动力电池×1 | 耐久: 300HP",upgrades:"深度模块 · 存储模块 · 周界防御 · 鱼雷系统 · 太阳能充电"},
@@ -1578,6 +1708,9 @@ function closeLeviathanExhibit(){
 var _origSearchByCat=searchByCat;
 searchByCat=function(cat){
   if(cat==="载具"){openVehicleExhibit();return}
+  if(cat==="工具"){openToolsExhibit();return}
+  if(cat==="基地模块"){openBaseExhibit();return}
+  if(cat==="生存装备"){openGearExhibit();return}
   if(cat==="生物"){openCreatureExhibit();return}
   if(cat==="利维坦"){openLeviathanExhibit();return}
   _origSearchByCat(cat);
@@ -1636,6 +1769,34 @@ searchByCat=function(cat){
     </div>
   </div>
   <div class="creature-grid" id="vehicleGrid"></div>
+</div>
+
+
+<!-- Tools Exhibit -->
+<div id="toolsExhibit">
+  <button class="exhibit-close" onclick="closeToolsExhibit()">✕</button>
+  <div class="creature-hero" style="background:linear-gradient(180deg,rgba(78,150,196,.15),rgba(2,10,20,.95))">
+    <div class="hero-title"><div class="hero-sub">Alterra · 深海工程技术</div><h2>🔧 工 具 图 鉴</h2></div>
+  </div>
+  <div class="creature-grid" id="toolsGrid"></div>
+</div>
+
+<!-- Base Modules Exhibit -->
+<div id="baseExhibit">
+  <button class="exhibit-close" onclick="closeBaseExhibit()">✕</button>
+  <div class="creature-hero" style="background:linear-gradient(180deg,rgba(196,160,78,.15),rgba(2,10,20,.95))">
+    <div class="hero-title"><div class="hero-sub">Alterra · 水下建造系统</div><h2>🏠 基 地 模 块</h2></div>
+  </div>
+  <div class="creature-grid" id="baseGrid"></div>
+</div>
+
+<!-- Survival Gear Exhibit -->
+<div id="gearExhibit">
+  <button class="exhibit-close" onclick="closeGearExhibit()">✕</button>
+  <div class="creature-hero" style="background:linear-gradient(180deg,rgba(78,196,120,.15),rgba(2,10,20,.95))">
+    <div class="hero-title"><div class="hero-sub">Alterra · 生存保障系统</div><h2>🎒 生 存 装 备</h2></div>
+  </div>
+  <div class="creature-grid" id="gearGrid"></div>
 </div>
 
 </body>
