@@ -282,7 +282,11 @@ body::after{content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);
 /* Leviathan Danger Styling */
 .cat-card.leviathan-card{border-color:var(--red);box-shadow:0 0 20px rgba(255,107,107,.2)}
 .cat-card.leviathan-card:hover{border-color:#ff4444;box-shadow:0 0 35px rgba(255,107,107,.4)}
-.cat-card.leviathan-card .label{color:var(--red)}</style>
+.cat-card.leviathan-card .label{color:var(--red)}
+/* Map Overlay */
+#mapOverlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.95);cursor:pointer;justify-content:center;align-items:center;flex-direction:column}
+#mapOverlay.active{display:flex;animation:fadeSlideIn .25s ease}
+#mapOverlay img{max-width:96vw;max-height:88vh;object-fit:contain;border-radius:8px;box-shadow:0 0 80px rgba(78,205,196,.25);cursor:default}</style>
 </head>
 <body>
 <div class="bg-img"></div>
@@ -326,7 +330,8 @@ body::after{content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);
       <div class="cat-card" onclick="searchByCat('基地模块')"><div class="icon">🏠</div><div class="label">基地模块</div></div>
       <div class="cat-card" onclick="searchByCat('生存装备')"><div class="icon">🎒</div><div class="label">生存装备</div></div>
       <div class="cat-card" onclick="searchByCat('生物')"><div class="icon">🐟</div><div class="label">生物</div></div>
-      <div class="cat-card" onclick="searchByCat('利维坦')" style="border-color:var(--red);box-shadow:0 0 15px rgba(255,107,107,.15)"><div class="icon">💀</div><div class="label" style="color:var(--red)">利维坦</div></div>
+      <div class="cat-card" onclick="searchByCat('生态区')"><div class="icon">🗺️</div><div class="label">生态区</div></div>
+      <div class="cat-card" onclick="searchByCat('利维坦')" style="border-color:var(--red);box-shadow:0 0 15px rgba(255,107,107,.15)" style="border-color:var(--red);box-shadow:0 0 15px rgba(255,107,107,.15)"><div class="icon">💀</div><div class="label" style="color:var(--red)">利维坦</div></div>
     </div>
     <div class="section-title">最近查询</div>
     <div id="recentList"></div>
@@ -861,7 +866,13 @@ body::after{content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);
   </div>
 </div>
 <!-- 图片灯箱 -->
-<div id="lightbox" onclick="closeLightbox()">
+<div 
+<!-- 地图全屏 -->
+<div id="mapOverlay" onclick="closeMap()">
+  <span class="lb-close" onclick="closeMap()">✕</span>
+  <img id="mapOverlayImg" src="images/items/Biome_Map.png" alt="4546B世界地图">
+  <div class="lb-caption">🗺️ 4546B 星球 · 完整生态区分布图</div>
+</div>id="lightbox" onclick="closeLightbox()">
   <span class="lb-close" onclick="closeLightbox()">✕</span>
   <img id="lightboxImg" src="" alt="">
   <div class="lb-caption" id="lightboxCaption"></div>
@@ -1126,6 +1137,79 @@ const craftingData=[
     {name:'钛',qty:2,img:IMG('titanium'),source:['安全浅滩'],tool:'建造器',danger:!1,level:1},
     {name:'铜矿石',qty:1,img:IMG('copper'),source:['安全浅滩'],tool:'生存匕首',danger:!1,level:1}
   ]},
+  {id:'biomemap',name:'🗺️ 4546B 世界地图',img:IMG('biomemap'),cat:'生态区',stars:5,materials:[
+    {name:'完整生态区分布图',qty:1,img:IMG('biomemap'),source:['Alterra轨道扫描'],tool:'点击查看大地图',danger:!1,level:1}
+  ]},
+  {id:'safeshallow',name:'安全浅滩',img:IMG('safeshallow'),cat:'生态区',stars:1,materials:[
+    {name:'钛',qty:99,img:IMG('titanium'),source:['起始生态区'],tool:'生存匕首',danger:!1,level:1},
+    {name:'铜矿石',qty:99,img:IMG('copper'),source:['石灰岩'],tool:'生存匕首',danger:!1,level:1},
+    {name:'大眼鱼',qty:99,img:IMG('peeper'),source:['浅水区'],tool:'徒手',danger:!1,level:1}
+  ]},
+  {id:'kelpforest',name:'海藻森林',img:IMG('kelpforest'),cat:'生态区',stars:1,materials:[
+    {name:'海藻块',qty:99,img:IMG('kelp'),source:['海藻藤'],tool:'生存匕首',danger:!1,level:1},
+    {name:'潜行者牙',qty:5,img:IMG('stalker'),source:['潜行者'],tool:'金属引诱',danger:!0,level:1}
+  ]},
+  {id:'grassyplat',name:'红色草原',img:IMG('grassyplat'),cat:'生态区',stars:2,materials:[
+    {name:'石英',qty:99,img:IMG('quartz'),source:['海底散落'],tool:'徒手',danger:!1,level:1},
+    {name:'铅',qty:99,img:IMG('lead'),source:['砂岩'],tool:'生存匕首',danger:!1,level:1},
+    {name:'沙鲨',qty:3,img:IMG('sandshark'),source:['沙地埋伏'],tool:'海蛾周界防御',danger:!0,level:1}
+  ]},
+  {id:'jellycave',name:'蛇菇洞',img:IMG('jellycave'),cat:'生态区',stars:3,materials:[
+    {name:'钻石',qty:10,img:IMG('diamond'),source:['页岩'],tool:'海虾钻臂',danger:!1,level:1},
+    {name:'磁铁矿',qty:10,img:IMG('diamond'),source:['洞壁'],tool:'海虾钻臂',danger:!1,level:1}
+  ]},
+  {id:'floatisland',name:'浮岛区',img:IMG('floatisland'),cat:'生态区',stars:2,materials:[
+    {name:'钛',qty:99,img:IMG('titanium'),source:['岛屿周边'],tool:'生存匕首',danger:!1,level:1},
+    {name:'骨鲨',qty:5,img:IMG('boneshark'),source:['周边水域'],tool:'海蛾撞击',danger:!0,level:1}
+  ]},
+  {id:'mtnisland',name:'五指山岛',img:IMG('mtnisland'),cat:'生态区',stars:3,materials:[
+    {name:'锂',qty:20,img:IMG('lithium'),source:['洞窟页岩'],tool:'海虾钻臂',danger:!1,level:1},
+    {name:'钻石',qty:10,img:IMG('diamond'),source:['洞窟'],tool:'海虾钻臂',danger:!1,level:1}
+  ]},
+  {id:'mushroomf',name:'蘑菇森林',img:IMG('mushroomf'),cat:'生态区',stars:2,materials:[
+    {name:'锂',qty:15,img:IMG('lithium'),source:['蘑菇树干'],tool:'海虾钻臂',danger:!1,level:1},
+    {name:'钻石',qty:10,img:IMG('diamond'),source:['页岩'],tool:'海虾钻臂',danger:!1,level:1}
+  ]},
+  {id:'bloodkelp',name:'血藻区',img:IMG('bloodkelp'),cat:'生态区',stars:4,materials:[
+    {name:'石英',qty:99,img:IMG('quartz'),source:['海底'],tool:'徒手',danger:!1,level:1},
+    {name:'电鳗',qty:5,img:IMG('ampeel'),source:['血藻深渊'],tool:'海虾电钻',danger:!0,level:1}
+  ]},
+  {id:'grandreef',name:'大堡礁',img:IMG('grandreef'),cat:'生态区',stars:3,materials:[
+    {name:'钻石',qty:15,img:IMG('diamond'),source:['页岩'],tool:'海虾钻臂',danger:!1,level:1},
+    {name:'蟹鱿',qty:3,img:IMG('crabsquid'),source:['深海暗区'],tool:'停滞步枪',danger:!0,level:1}
+  ]},
+  {id:'sparsereef',name:'稀疏礁石区',img:IMG('sparsereef'),cat:'生态区',stars:2,materials:[
+    {name:'石英',qty:99,img:IMG('quartz'),source:['海底'],tool:'徒手',danger:!1,level:1},
+    {name:'银矿石',qty:20,img:IMG('lead'),source:['砂岩'],tool:'生存匕首',danger:!1,level:1}
+  ]},
+  {id:'seatreader',name:'踏浪者之路',img:IMG('seatreader'),cat:'生态区',stars:3,materials:[
+    {name:'页岩',qty:50,img:IMG('diamond'),source:['踏浪者排泄物'],tool:'徒手',danger:!1,level:1}
+  ]},
+  {id:'dunes',name:'沙丘区',img:IMG('dunes'),cat:'生态区',stars:5,materials:[
+    {name:'石英',qty:99,img:IMG('quartz'),source:['沙丘'],tool:'徒手',danger:!1,level:1},
+    {name:'⚠ 死神利维坦',qty:5,img:IMG('reaper'),source:['沙丘上空'],tool:'远离!!!',danger:!0,level:1}
+  ]},
+  {id:'bulbzone',name:'灯泡区',img:IMG('bulbzone'),cat:'生态区',stars:3,materials:[
+    {name:'锂',qty:15,img:IMG('lithium'),source:['页岩'],tool:'海虾钻臂',danger:!1,level:1},
+    {name:'骨鲨',qty:5,img:IMG('boneshark'),source:['周边'],tool:'海蛾撞击',danger:!0,level:1}
+  ]},
+  {id:'crashzone',name:'坠毁区',img:IMG('crashzone'),cat:'生态区',stars:4,materials:[
+    {name:'钛',qty:99,img:IMG('titanium'),source:['极光号残骸'],tool:'生存匕首',danger:!1,level:1},
+    {name:'⚠ 死神利维坦',qty:7,img:IMG('reaper'),source:['极光号周边'],tool:'远离!!!',danger:!0,level:1}
+  ]},
+  {id:'lostriver',name:'失落之河',img:IMG('lostriver'),cat:'生态区',stars:4,materials:[
+    {name:'镍矿石',qty:30,img:IMG('lithium'),source:['绿色盐水'],tool:'海虾钻臂',danger:!1,level:1},
+    {name:'硫磺',qty:20,img:IMG('diamond'),source:['毒雾区'],tool:'海虾钻臂',danger:!0,level:1},
+    {name:'幽灵利维坦',qty:3,img:IMG('ghostlev'),source:['龙骨区'],tool:'独眼巨人护盾',danger:!0,level:1}
+  ]},
+  {id:'lavazone',name:'熔岩区',img:IMG('lavazone'),cat:'生态区',stars:5,materials:[
+    {name:'蓝晶石',qty:30,img:IMG('diamond'),source:['熔岩壁'],tool:'海虾钻臂',danger:!0,level:1},
+    {name:'海龙利维坦',qty:2,img:IMG('seadragon'),source:['熔岩湖'],tool:'独眼巨人护盾',danger:!0,level:1}
+  ]},
+  {id:'lavalakes',name:'熔岩湖',img:IMG('lavalakes'),cat:'生态区',stars:5,materials:[
+    {name:'蓝晶石',qty:20,img:IMG('diamond'),source:['熔岩壁'],tool:'海虾钻臂',danger:!0,level:1},
+    {name:'海皇利维坦',qty:1,img:IMG('emperor'),source:['海皇监狱'],tool:'孵化器',danger:!1,level:1}
+  ]},
 ];
 
 let searchMode='forward',currentItem=null,selectedNode=null;
@@ -1254,7 +1338,22 @@ document.addEventListener('click', function(e) {
 });
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') { closeLightbox(); }
-});</script>
+});
+// Map Overlay
+function openMap(){
+  document.getElementById('mapOverlay').classList.add('active');
+  document.body.style.overflow='hidden';
+}
+function closeMap(){
+  document.getElementById('mapOverlay').classList.remove('active');
+  document.body.style.overflow='';
+}
+// Handle map item click - override to show map
+const origOpenDetail=openDetail;
+openDetail=function(id){
+  if(id==='biomemap'){openMap();return}
+  origOpenDetail(id);
+};</script>
 </body>
 </html>
 
