@@ -396,7 +396,7 @@ body::after{content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);
       <div class="cat-card" onclick="searchByCat('生存装备')"><div class="icon">🎒</div><div class="label">生存装备</div></div>
       <div class="cat-card" onclick="searchByCat('生物')"><div class="icon">🐟</div><div class="label">生物</div></div>
       <div class="cat-card" onclick="searchByCat('植物')"><div class="icon">🌿</div><div class="label">植物</div></div>
-      <div class="cat-card" onclick="searchByCat('升级模块')"><div class="icon">⚡</div><div class="label">升级模块</div></div>
+      
       <div class="cat-card" onclick="searchByCat('物品')"><div class="icon">📦</div><div class="label">物品</div></div>
       <div class="cat-card" onclick="searchByCat('利维坦')" style="border-color:var(--red);box-shadow:0 0 15px rgba(255,107,107,.15)"><div class="icon">💀</div><div class="label" style="color:var(--red)">利维坦</div></div>
     </div>
@@ -1803,6 +1803,42 @@ function showItemsImage(ev,id){
   lb.classList.add("active");document.body.style.overflow="hidden";
 }
 
+
+// ═══════════ Vehicle Upgrades Injection ═══════════
+const vehUpgradeMap={
+seamoth:["depth1","depth2","depth3","storage","perimeter","torpedo","sonar","solar","efficiency","hull"],
+prawn:["depth2","depth3","drillarm","grapplearm","jumpjet","thermal","torpedo","storage","hull"],
+cyclops:["depth1","depth2","depth3","sonar","shield","fire","efficiency","thermal","decoy","repairdock","hull"]
+};
+function injectVehicleUpgrades(vehId,vehName,exhibitId){
+  setTimeout(function(){
+    var exhibit=document.getElementById(exhibitId);
+    if(!exhibit) return;
+    var oldEl=document.getElementById(vehId+"Upgrades");
+    if(oldEl) return;
+    var upgradeIds=vehUpgradeMap[vehId]||[];
+    if(!upgradeIds.length) return;
+    var html='<div class="exhibit-section" id="'+vehId+'Upgrades" style="max-width:700px;margin:0 auto;padding:0 20px 30px">';
+    html+='<h3>⚡ '+vehName+' 升级模块</h3>';
+    html+='<div class="upgrade-strip" style="display:flex;gap:12px;overflow-x:auto;padding-bottom:12px;scroll-snap-type:x mandatory">';
+    upgradeIds.forEach(function(uid){
+      var d=upgradesData.find(function(x){return x.id===uid});
+      if(!d) return;
+      var imgFile=upgradeImgMap[uid]||(d.name.replace(/ /g,"_")+".png");
+      var imgSrc="images/items/"+imgFile;
+      html+='<div style="flex:0 0 160px;border-radius:12px;overflow:hidden;border:1px solid var(--border);background:var(--glass);scroll-snap-align:start">';
+      html+='<img src="'+imgSrc+'" alt="'+d.name+'" style="width:100%;height:120px;object-fit:contain;background:rgba(0,0,0,.3);cursor:zoom-in" onclick="showUpgradeImage(event,\x27'+uid+'\x27)" onerror="this.hidden=true">';
+      html+='<div style="padding:8px 10px"><div style="font-size:11px;font-weight:600;color:var(--text)">'+d.name+'</div>';
+      html+='<div style="font-size:10px;color:var(--text2);margin-top:2px">'+d.desc.substring(0,40)+'...</div></div>';
+      html+='</div>';
+    });
+    html+='</div></div>';
+    var body=exhibit.querySelector(".exhibit-body,.prawn-body,.seamoth-body");
+    if(!body) body=exhibit;
+    body.insertAdjacentHTML("beforeend",html);
+  },100);
+}
+
 // ═══════════ Flora Data ═══════════
 const floraData={
 acidmushroom:{name:"酸蘑菇",desc:"常见于安全浅滩的荧光蘑菇。可采集酸性孢子用于制造电池。触碰会释放酸性灼伤，建议用刀采集。",habitat:"安全浅滩",use:"电池制作 · 酸性材料"},
@@ -2067,7 +2103,6 @@ searchByCat=function(cat){
   if(cat==="生物"){openCreatureExhibit();return}
   if(cat==="物品"){openItemsExhibit();return}
   if(cat==="植物"){openFloraExhibit();return}
-  if(cat==="升级模块"){openUpgradesExhibit();return}
   if(cat==="利维坦"){openLeviathanExhibit();return}
   _origSearchByCat(cat);
 };
