@@ -282,7 +282,37 @@ body::after{content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);
 /* Leviathan Danger Styling */
 .cat-card.leviathan-card{border-color:var(--red);box-shadow:0 0 20px rgba(255,107,107,.2)}
 .cat-card.leviathan-card:hover{border-color:#ff4444;box-shadow:0 0 35px rgba(255,107,107,.4)}
-.cat-card.leviathan-card .label{color:var(--red)}</style>
+.cat-card.leviathan-card .label{color:var(--red)}
+/* ═══════════ Tool Intro Panel ═══════════ */
+.tool-toggle{position:fixed;right:12px;top:55%;z-index:50;width:44px;height:44px;border-radius:50%;background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--border);color:var(--teal);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .35s;box-shadow:0 0 15px rgba(78,205,196,.15)}
+.tool-toggle:hover{background:rgba(78,205,196,.15);box-shadow:0 0 25px rgba(78,205,196,.35);transform:scale(1.05)}
+.tool-toggle.open{right:302px}
+.tool-panel{position:fixed;right:-320px;top:8%;bottom:8%;width:300px;z-index:48;background:rgba(2,10,22,.92);backdrop-filter:blur(18px);border:1px solid var(--border);border-right:none;border-radius:16px 0 0 16px;overflow-y:auto;overflow-x:hidden;transition:right .4s cubic-bezier(.4,0,.2,1);box-shadow:-4px 0 30px rgba(0,0,0,.4)}
+.tool-panel.show{right:0}
+.tool-panel::-webkit-scrollbar{width:4px}
+.tool-panel::-webkit-scrollbar-thumb{background:var(--teal);border-radius:2px}
+.tool-panel-header{padding:14px 16px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(2,10,22,.95);backdrop-filter:blur(12px);z-index:2;border-radius:16px 0 0 0;display:flex;align-items:center;justify-content:space-between}
+.tool-panel-header h3{margin:0;font-size:15px;color:var(--teal);display:flex;align-items:center;gap:8px}
+.tool-panel-tabs{display:flex;gap:6px;padding:10px 16px;border-bottom:1px solid var(--border);position:sticky;top:52px;background:rgba(2,10,22,.95);backdrop-filter:blur(12px);z-index:2}
+.tool-panel-tab{padding:5px 12px;border-radius:20px;font-size:11px;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text2);transition:all .3s;white-space:nowrap}
+.tool-panel-tab.active,.tool-panel-tab:hover{background:var(--teal);color:#000;border-color:var(--teal)}
+.tool-panel-list{padding:8px 10px}
+.tool-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;transition:all .3s;border:1px solid transparent;margin-bottom:3px}
+.tool-item:hover{background:rgba(78,205,196,.06);border-color:rgba(78,205,196,.2)}
+.tool-item.expanded{background:rgba(78,205,196,.1);border-color:var(--teal)}
+.tool-item-thumb{width:42px;height:42px;border-radius:8px;object-fit:contain;background:rgba(0,0,0,.35);flex-shrink:0;border:1px solid var(--border)}
+.tool-item-info{flex:1;min-width:0}
+.tool-item-name{font-size:13px;font-weight:600;color:var(--text)}
+.tool-item-stars{font-size:10px;color:var(--gold);margin-top:1px}
+.tool-item-desc{font-size:11px;color:var(--text2);margin-top:2px;line-height:1.4}
+.tool-item-detail{display:none;padding:6px 12px 10px;margin-top:2px;border-top:1px solid rgba(255,255,255,.05)}
+.tool-item.expanded .tool-item-detail{display:block}
+.tool-item-detail .mat-row{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2);padding:2px 0}
+.tool-item-detail .mat-row img{width:20px;height:20px;border-radius:4px;object-fit:contain;background:rgba(0,0,0,.3)}
+.tool-item-detail .mat-label{font-weight:600;color:var(--warning)}
+.tool-item-source{font-size:10px;color:var(--text2);margin-top:5px}
+
+</style>
 </head>
 <body>
 <div class="bg-img"></div>
@@ -1254,7 +1284,104 @@ document.addEventListener('click', function(e) {
 });
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') { closeLightbox(); }
-});</script>
+});
+// ═══════════ Tool Descriptions ═══════════
+const toolDescs={
+welder: "用于修复受损的载具和基地模块。潜水员的必备维修工具，在深海探险中能挽救你的生命。",
+lasercutter: "发射高能激光束，切割密封门和金属障碍物。探索极光号残骸的关键装备。",
+builder: "建造海底基地模块的核心工具。只需蓝图和材料，即可在深海搭建你的水下家园。",
+scanner: "扫描生物、碎片和科技蓝图。连接PDA数据库，解锁新配方，深入了解4546B星球。",
+knife: "潜水员最信赖的多功能工具——采集海藻、珊瑚样本，也能在危急时刻自卫。",
+flashlight: "在深暗洞穴和夜间探险时提供可靠照明。电池驱动，轻便实用。",
+repair: "修复损坏的设备和载具系统。焊接器的补充工具，精准处理电子元件故障。",
+propulsion: "抓取和投掷小型物体。可以拾取矿石、驱赶小型捕食者，还能清除障碍物。",
+stasis: "发射时间停滞场，短暂冻结范围内的所有生物。面对利维坦时的终极保命装备。",
+tank: "标准高压氧气瓶，将水下呼吸时间延长至75秒。每位潜水员的基础生命保障。",
+fins: "流线型脚蹼设计，显著提高游泳速度。让你在水中如鱼般自如穿梭。",
+hc_tank: "超大容量氧气瓶，水下呼吸时间大幅延长至225秒。深潜探索深海洞穴的必备。",
+seaglide: "手持水下推进器，快速穿梭于深海。内置导航地图和照明灯，探索利器。",
+chargefins: "动能回收脚蹼，游泳时自动为手持工具充电。告别频繁更换电池的烦恼。",
+radsuit: "全身密封防辐射服，抵御极光号反应堆周围的致命辐射。进入辐射区的通行证。",
+rebreather: "深度水下面罩，在超过100米的深度显著降低氧气消耗速率。深潜必备。",
+compass: "全息指南针，实时显示方向和方位。在茫茫深海中不再迷失。"
+};
+
+// ═══════════ Tool Panel Logic ═══════════
+let toolPanelOpen=false, currentToolTab="all", expandedTool=null;
+
+function toggleToolPanel(){
+  toolPanelOpen=!toolPanelOpen;
+  document.getElementById("toolPanel").classList.toggle("show",toolPanelOpen);
+  document.getElementById("toolToggle").classList.toggle("open",toolPanelOpen);
+  if(toolPanelOpen) renderToolPanel();
+}
+
+function switchToolTab(cat){
+  currentToolTab=cat;
+  var tabs=document.querySelectorAll(".tool-panel-tab");
+  tabs.forEach(function(t){t.classList.remove("active")});
+  var e=window.event||event;
+  if(e&&e.target)e.target.classList.add("active");
+  expandedTool=null;
+  renderToolPanel();
+}
+
+function renderToolPanel(){
+  var list=document.getElementById("toolPanelList");
+  var items=craftingData.filter(function(d){return d.cat==="工具"||d.cat==="生存装备"});
+  if(currentToolTab!=="all") items=items.filter(function(d){return d.cat===currentToolTab});
+  var html=[];
+  items.forEach(function(item){
+    var stars="";
+    for(var i=0;i<(item.stars||2);i++) stars+="⭐";
+    var desc=toolDescs[item.id]||"深海迷航中的基础装备，探索4546B星球的必备之物。";
+    var expCls=expandedTool===item.id?" expanded":"";
+    html.push('<div class="tool-item'+expCls+'" onclick="expandToolItem(&quot;"+item.id+"&quot;)">');
+    html.push('<img class="tool-item-thumb" src="'+item.img+'" alt="'+item.name+'" onerror="this.style.display=\'none\'">');
+    html.push('<div class="tool-item-info">');
+    html.push('<div class="tool-item-name">'+item.name+'</div>');
+    html.push('<div class="tool-item-stars">'+stars+'</div>');
+    html.push('<div class="tool-item-desc">'+desc.substring(0,35)+'...</div>');
+    html.push('</div></div>');
+    html.push('<div class="tool-item-detail">');
+    html.push('<div style="font-size:11px;color:var(--text2);margin-bottom:6px">'+desc+'</div>');
+    if(item.materials&&item.materials.length>0){
+      html.push('<div style="font-size:11px;font-weight:600;color:var(--teal);margin-bottom:4px">📦 合成材料</div>');
+      item.materials.forEach(function(m){
+        html.push('<div class="mat-row">');
+        html.push('<span class="mat-label">'+m.name+'</span>');
+        html.push('<span style="color:var(--warning)">×'+m.qty+'</span>');
+        html.push('<span style="font-size:10px">('+(m.source||[]).join(", ")+'</span>');
+        html.push('<span style="font-size:10px">🔪 '+m.tool+')</span>');
+        html.push('</div>');
+      });
+    }
+    html.push('</div>');
+  });
+  list.innerHTML=html.join("")||'<div style="text-align:center;padding:20px;color:var(--text2)">暂无道具</div>';
+}
+function expandToolItem(id){
+  expandedTool=(expandedTool===id)?null:id;
+  renderToolPanel();
+}
+
+</script>
+
+<!-- ═══════════ Tool Intro Panel ═══════════ -->
+<button class="tool-toggle" id="toolToggle" onclick="toggleToolPanel()" title="道具介绍">📋</button>
+<div class="tool-panel" id="toolPanel">
+  <div class="tool-panel-header">
+    <h3>📋 道具图鉴</h3>
+    <span style="font-size:11px;color:var(--text2);cursor:pointer" onclick="toggleToolPanel()">✕</span>
+  </div>
+  <div class="tool-panel-tabs">
+    <div class="tool-panel-tab active" onclick="switchToolTab('all')">全部</div>
+    <div class="tool-panel-tab" onclick="switchToolTab('工具')">🔧 工具</div>
+    <div class="tool-panel-tab" onclick="switchToolTab('生存装备')">🎒 装备</div>
+  </div>
+  <div class="tool-panel-list" id="toolPanelList"></div>
+</div>
+
 </body>
 </html>
 
