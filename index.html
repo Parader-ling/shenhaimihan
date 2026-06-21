@@ -319,7 +319,7 @@ body::after{content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);
 @keyframes toolPulse{0%,100%{box-shadow:0 0 20px rgba(78,205,196,.25),0 0 60px rgba(78,205,196,.1)}50%{box-shadow:0 0 35px rgba(78,205,196,.4),0 0 90px rgba(78,205,196,.2)}}
 
 /* Creature & Leviathan Exhibit */
-#creatureExhibit,#leviathanExhibit,#vehicleExhibit,#toolsExhibit,#baseExhibit,#gearExhibit,#floraExhibit,#upgradesExhibit,#itemsExhibit{display:none;position:fixed;inset:0;z-index:100;background:rgba(2,10,20,.97);overflow-y:auto;overflow-x:hidden}
+#creatureExhibit,#leviathanExhibit,#vehicleExhibit,#toolsExhibit,#baseExhibit,#gearExhibit,#floraExhibit,#upgradesExhibit,#itemsExhibit,#gameplayExhibit,#storyExhibit{display:none;position:fixed;inset:0;z-index:100;background:rgba(2,10,20,.97);overflow-y:auto;overflow-x:hidden}
 .creature-hero{position:relative;height:200px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(2,30,40,.8),rgba(2,10,20,.95))}
 .creature-hero .hero-title{text-align:center;z-index:2}
 .creature-hero .hero-title h2{font-size:42px;margin:0;letter-spacing:6px;color:#fff;text-shadow:0 0 30px var(--teal)}
@@ -350,6 +350,24 @@ body::after{content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);
 .creature-card .mat-detail .mat-name{font-weight:600;color:var(--warning)}
 .creature-card .mat-detail .mat-section{font-size:11px;font-weight:600;color:var(--teal);margin:4px 0 2px}
 .creature-card .mat-detail .src-tag{font-size:10px;padding:1px 7px;border-radius:10px;background:rgba(78,205,196,.1);color:var(--teal)}
+
+
+/* Gameplay & Story Modules */
+.gameplay-section{max-width:900px;margin:0 auto;padding:20px 24px}
+.gameplay-section h3{font-size:20px;color:var(--teal);margin:30px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.gameplay-section h3:first-child{margin-top:0}
+.gameplay-section p{font-size:13px;color:var(--text2);line-height:1.8;margin:8px 0 16px}
+.gameplay-card{background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:14px;padding:20px;margin:12px 0;display:flex;gap:16px;align-items:flex-start}
+.gameplay-card img{width:120px;height:120px;object-fit:contain;border-radius:10px;background:rgba(0,0,0,.3);flex-shrink:0;border:1px solid var(--border)}
+.gameplay-card .gc-body{flex:1}
+.gameplay-card .gc-body h4{font-size:15px;color:var(--text);margin:0 0 4px}
+.gameplay-card .gc-body p{font-size:12px;color:var(--text2);line-height:1.6;margin:0}
+.story-timeline{position:relative;padding-left:30px;margin:16px 0}
+.story-timeline::before{content:'';position:absolute;left:12px;top:0;bottom:0;width:2px;background:var(--teal);opacity:.3}
+.story-event{position:relative;margin-bottom:20px;padding:14px 18px;background:var(--glass);border:1px solid var(--border);border-radius:12px}
+.story-event::before{content:'';position:absolute;left:-24px;top:18px;width:10px;height:10px;border-radius:50%;background:var(--teal);border:2px solid rgba(2,10,20,.95)}
+.story-event h4{font-size:14px;color:var(--teal);margin:0 0 4px}
+.story-event p{font-size:12px;color:var(--text2);line-height:1.6;margin:0}
 
 </style>
 </head>
@@ -395,6 +413,8 @@ body::after{content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);
       <div class="cat-card" onclick="searchByCat('基地模块')"><div class="icon">🏠</div><div class="label">基地模块</div></div>
       <div class="cat-card" onclick="searchByCat('生存装备')"><div class="icon">🎒</div><div class="label">生存装备</div></div>
       <div class="cat-card" onclick="searchByCat('生物')"><div class="icon">🐟</div><div class="label">生物</div></div>
+      <div class="cat-card" onclick="searchByCat('游戏')"><div class="icon">🎮</div><div class="label">游戏系统</div></div>
+      <div class="cat-card" onclick="searchByCat('故事')"><div class="icon">📖</div><div class="label">编年史</div></div>
       <div class="cat-card" onclick="searchByCat('植物')"><div class="icon">🌿</div><div class="label">植物</div></div>
       
       <div class="cat-card" onclick="searchByCat('物品')"><div class="icon">📦</div><div class="label">物品</div></div>
@@ -1839,6 +1859,24 @@ function injectVehicleUpgrades(vehId,vehName,exhibitId){
   },100);
 }
 
+
+function openGameplayExhibit(){
+  document.getElementById("gameplayExhibit").style.display="block";
+  document.body.style.overflow="hidden";
+}
+function closeGameplayExhibit(){
+  document.getElementById("gameplayExhibit").style.display="none";
+  document.body.style.overflow="";
+}
+function openStoryExhibit(){
+  document.getElementById("storyExhibit").style.display="block";
+  document.body.style.overflow="hidden";
+}
+function closeStoryExhibit(){
+  document.getElementById("storyExhibit").style.display="none";
+  document.body.style.overflow="";
+}
+
 // ═══════════ Flora Data ═══════════
 const floraData={
 acidmushroom:{name:"酸蘑菇",desc:"常见于安全浅滩的荧光蘑菇。可采集酸性孢子用于制造电池。触碰会释放酸性灼伤，建议用刀采集。",habitat:"安全浅滩",use:"电池制作 · 酸性材料"},
@@ -2102,6 +2140,8 @@ searchByCat=function(cat){
   if(cat==="生存装备"){openGearExhibit();return}
   if(cat==="生物"){openCreatureExhibit();return}
   if(cat==="物品"){openItemsExhibit();return}
+  if(cat==="游戏"){openGameplayExhibit();return}
+  if(cat==="故事"){openStoryExhibit();return}
   if(cat==="植物"){openFloraExhibit();return}
   if(cat==="利维坦"){openLeviathanExhibit();return}
   _origSearchByCat(cat);
@@ -2225,6 +2265,84 @@ searchByCat=function(cat){
     <div class="tool-panel-tab" onclick="switchItemsTab('deploy',event)">📡 可部署物</div>
   </div>
   <div class="creature-grid" id="itemsGrid"></div>
+</div>
+
+
+<!-- Gameplay Exhibit -->
+<div id="gameplayExhibit">
+  <button class="exhibit-close" onclick="closeGameplayExhibit()">✕</button>
+  <div class="leviathan-hero" style="background:linear-gradient(180deg,rgba(10,50,70,.85),rgba(2,10,20,.97))">
+    <div class="hero-title"><div class="hero-sub" style="color:var(--teal)">Survive · Craft · Explore · Escape</div><h2 style="text-shadow:0 0 50px var(--teal)">🎮 游 戏 系 统</h2></div>
+  </div>
+  <div class="gameplay-section">
+    <h3>🔬 扫描与蓝图</h3>
+    <div class="gameplay-card">
+      <img src="images/items/Fragment.png" alt="碎片" onerror="this.hidden=true">
+      <div class="gc-body"><h4>碎片扫描</h4><p>散布在海底各处的科技碎片是获取蓝图的主要途径。使用扫描仪对碎片进行扫描，收集足够的碎片数据即可在PDA中解锁对应的制造蓝图。不同科技需要的碎片数量从1到20不等。</p></div>
+    </div>
+    <div class="gameplay-card">
+      <img src="images/items/Scanner.png" alt="扫描仪" onerror="this.hidden=true">
+      <div class="gc-body"><h4>扫描仪</h4><p>手持扫描设备，可扫描生物、植物、碎片和科技蓝图。连接PDA数据库，实时显示目标信息。是探索4546B星球的必备工具，也是推进剧情的关键设备。</p></div>
+    </div>
+
+    <h3>⚙️ 制造系统</h3>
+    <div class="gameplay-card">
+      <img src="images/items/Fabricator.png" alt="制造器" onerror="this.hidden=true">
+      <div class="gc-body"><h4>制造器 (Fabricator)</h4><p>救生舱内置的核心制造设备。将原材料按照蓝图配方加工成工具、装备和生存物资。所有物品的制造都从这个设备开始，是最基础也是最重要的生存工具。</p></div>
+    </div>
+    <p>制造系统分为多个层级：基础材料（钛、铜、石英）→ 高级材料（玻璃、润滑油、硅胶）→ 电子元件（电池、电路板）→ 最终成品。合理规划资源采集路线是高效生存的关键。</p>
+
+    <h3>🏠 基地建造</h3>
+    <div class="gameplay-card">
+      <img src="images/items/Builder.png" alt="建造器" onerror="this.hidden=true">
+      <div class="gc-body"><h4>建造器</h4><p>海底基地的"施工工具"。通过建造器放置房间、走廊、舱门等结构模块，在深海中搭建属于自己的水下家园。建造需要消耗钛、石英等材料，大型基地需要核反应堆或热反应堆提供充足电力。</p></div>
+    </div>
+    <p>基地不仅可以提供安全的氧气供给和储物空间，还能安装扫描室、水族馆、月池等高级设施。基地的完整性由地基和加固模块维持，过低会导致漏水损坏。</p>
+
+    <h3>💧 生存机制</h3>
+    <p>深海迷航的核心生存要素包括：<b>氧气</b>（O₂）——离开基地或载具后持续消耗，耗尽则溺亡；<b>饥饿与口渴</b>——需定期进食鱼类和饮用过滤水；<b>温度</b>——极深海域需要强化潜水服；<b>辐射</b>——极光号周边需要防辐射服；<b>伤害</b>——生物攻击和环境影响可用急救包治愈。</p>
+
+    <h3>🗺️ 探索与导航</h3>
+    <p>4546B星球大部分被海洋覆盖，探索从安全浅滩开始向外辐射。随着深度模组升级，逐渐解锁海藻森林→红色草原→蛇菇洞→失落之河→熔岩区的探索路线。信标、指南针和声纳系统是防止迷路的关键工具。</p>
+  </div>
+</div>
+
+<!-- Story Exhibit -->
+<div id="storyExhibit">
+  <button class="exhibit-close" onclick="closeStoryExhibit()">✕</button>
+  <div class="leviathan-hero" style="background:linear-gradient(180deg,rgba(60,20,10,.85),rgba(2,10,20,.97))">
+    <div class="hero-title"><div class="hero-sub" style="color:var(--gold)">4546B · 被遗忘的星球</div><h2 style="text-shadow:0 0 50px var(--gold)">📖 深 海 编 年 史</h2></div>
+  </div>
+  <div class="gameplay-section">
+
+    <h3>⏱️ 时间线</h3>
+    <div class="story-timeline">
+      <div class="story-event"><h4>🚀 极光号启航</h4><p>Alterra集团建造的深空探索飞船"极光号"从地球出发，执行一项前往"牧羊人之门"星系的秘密任务。船员包括科学家、工程师和军事人员。</p></div>
+      <div class="story-event"><h4>💥 坠毁事件</h4><p>极光号在飞越4546B星球时遭遇不明能量武器攻击，船体严重受损，坠落在星球表面的浅海区域。大量船员乘坐救生舱弹射逃生，但大部分未能幸存。</p></div>
+      <div class="story-event"><h4>🏝️ 幸存者的觉醒</h4><p>主角Ryley Robinson从5号救生舱中苏醒，发现自己是极少数幸存者之一。PDA人工智能助手引导他开始在陌生的海洋星球上收集资源、维持生存。</p></div>
+      <div class="story-event"><h4>🧬 卡拉病毒的发现</h4><p>在探索过程中，幸存者发现这颗星球被一种名为"卡拉"（Kharaa）的致命细菌污染。感染卡拉病毒会在数周内导致基因崩溃死亡。星球上的本地生物正在大规模死亡。</p></div>
+    </div>
+
+    <h3>🏛️ 先驱者文明</h3>
+    <div class="gameplay-card">
+      <img src="images/items/Alien_Rifle.png" alt="先驱者" onerror="this.hidden=true">
+      <div class="gc-body"><h4>先驱者 (Precursors)</h4><p>数百万年前就已存在于4546B的天外来客。他们建立了遍布星球的外星设施网络，包括隔离执法平台、传送拱门和数据终端。他们的科技远超人类理解范围。</p></div>
+    </div>
+    <p>先驱者在探索宇宙的过程中发现并试图研究卡拉病毒。为防止病毒扩散，他们在4546B建立了隔离设施。但病毒的顽强生命力超出了他们的控制，先驱者最终被迫放弃了这颗星球，只留下了自动化防御系统。</p>
+    <p>关键的先驱者设施包括：<b>隔离执法平台</b>（击落极光号的武器）、<b>海皇监狱</b>（关押最后的海洋生物）、<b>传送拱门</b>（星际传送网络）、<b>离子晶体</b>（先驱者能源技术）。</p>
+
+    <h3>🏚️ 德加西幸存者</h3>
+    <p>在极光号坠毁的十年前，一艘蒙古集团所属的飞船"德加西号"（Degasi）也已坠毁在这颗星球上。幸存者包括船长Paul Torgal、他的儿子Bart Torgal，以及雇佣兵Marguerit Maida。</p>
+    <p>三人最初在浮岛上建立了第一座基地。随着资源耗尽和内部矛盾加剧，Marguerit独自深入深海，在蛇菇洞和失落之河继续生存。Paul和Bart则先后遇难。他们的PDA日志散落在各处，讲述了这段悲剧性的生存故事。</p>
+
+    <h3>🐋 海皇利维坦</h3>
+    <div class="gameplay-card">
+      <img src="images/items/Sea_Emperor_Leviathan.png" alt="海皇" onerror="this.hidden=true">
+      <div class="gc-body"><h4>海皇利维坦</h4><p>4546B星球的最后一只海皇生物。体长超过200米，拥有强大的心灵感应能力。她是治愈卡拉病毒的唯希望——她产下的酶42具有中和病毒的效能。</p></div>
+    </div>
+    <p>海皇被先驱者囚禁在海皇监狱水族馆中，作为研究卡拉病毒解药的实验体。她通过心灵感应在整个游戏过程中引导主角，最终在主角的帮助下孵化出幼体并释放了酶42。随着海皇的衰老离世和病毒被治愈，这个星球迎来了新的希望。</p>
+
+  </div>
 </div>
 
 </body>
