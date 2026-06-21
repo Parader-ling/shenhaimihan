@@ -319,7 +319,7 @@ body::after{content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);
 @keyframes toolPulse{0%,100%{box-shadow:0 0 20px rgba(78,205,196,.25),0 0 60px rgba(78,205,196,.1)}50%{box-shadow:0 0 35px rgba(78,205,196,.4),0 0 90px rgba(78,205,196,.2)}}
 
 /* Creature & Leviathan Exhibit */
-#creatureExhibit,#leviathanExhibit,#vehicleExhibit,#toolsExhibit,#baseExhibit,#gearExhibit,#floraExhibit,#upgradesExhibit{display:none;position:fixed;inset:0;z-index:100;background:rgba(2,10,20,.97);overflow-y:auto;overflow-x:hidden}
+#creatureExhibit,#leviathanExhibit,#vehicleExhibit,#toolsExhibit,#baseExhibit,#gearExhibit,#floraExhibit,#upgradesExhibit,#itemsExhibit{display:none;position:fixed;inset:0;z-index:100;background:rgba(2,10,20,.97);overflow-y:auto;overflow-x:hidden}
 .creature-hero{position:relative;height:200px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(2,30,40,.8),rgba(2,10,20,.95))}
 .creature-hero .hero-title{text-align:center;z-index:2}
 .creature-hero .hero-title h2{font-size:42px;margin:0;letter-spacing:6px;color:#fff;text-shadow:0 0 30px var(--teal)}
@@ -397,6 +397,7 @@ body::after{content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);
       <div class="cat-card" onclick="searchByCat('生物')"><div class="icon">🐟</div><div class="label">生物</div></div>
       <div class="cat-card" onclick="searchByCat('植物')"><div class="icon">🌿</div><div class="label">植物</div></div>
       <div class="cat-card" onclick="searchByCat('升级模块')"><div class="icon">⚡</div><div class="label">升级模块</div></div>
+      <div class="cat-card" onclick="searchByCat('物品')"><div class="icon">📦</div><div class="label">物品</div></div>
       <div class="cat-card" onclick="searchByCat('利维坦')" style="border-color:var(--red);box-shadow:0 0 15px rgba(255,107,107,.15)"><div class="icon">💀</div><div class="label" style="color:var(--red)">利维坦</div></div>
     </div>
     <div class="section-title">最近查询</div>
@@ -1621,6 +1622,141 @@ efficiency:"Engine_Efficiency_Module.png",hull:"Hull_Reinforcement.png",
 decoy:"Cyclops_Decoy_Tube_Upgrade.png",repairdock:"Cyclops_Thermal_Reactor_Module.png"
 };
 
+
+// ═══════════ Items Data ═══════════
+const itemsData={
+// Basic Materials
+titanium:{name:"钛",cat:"basic",desc:"4546B最常见的金属。从金属碎片和石灰岩中获取，是一切建造的基础。",source:"安全浅滩 · 各处"},
+copper_ore:{name:"铜矿石",cat:"basic",desc:"导电性极佳的金属矿石。制作电池和电子元件的核心材料。",source:"安全浅滩 · 石灰岩"},
+lead:{name:"铅",cat:"basic",desc:"高密度金属，防辐射性能优异。建造核反应堆和防辐射服的关键。",source:"红色草原 · 砂岩"},
+gold:{name:"金",cat:"basic",desc:"稀有贵金属，极佳的导电体和催化剂。用于高级电子元件合成。",source:"蛇菇洞 · 页岩"},
+diamond:{name:"钻石",cat:"basic",desc:"极度坚硬的高压碳结晶。制作激光切割器和高级工具。",source:"蛇菇洞 · 页岩"},
+lithium:{name:"锂",cat:"basic",desc:"轻质碱金属，反应性极强。用于加固船体和高级合金。",source:"失落之河 · 页岩"},
+quartz:{name:"石英",cat:"basic",desc:"透明的二氧化硅晶体。制作玻璃和基础电子设备的材料。",source:"安全浅滩 · 各处"},
+glass:{name:"玻璃",cat:"basic",desc:"由石英熔炼制成。用于建造观察窗、水族馆和瞭望台。",source:"建造器合成"},
+magnetite:{name:"磁铁矿",cat:"basic",desc:"天然磁性矿物。制作声纳系统和热反应堆的关键材料。",source:"蛇菇洞 · 失落之河"},
+kyanite:{name:"蓝晶石",cat:"basic",desc:"只在熔岩区发现的超高温矿物。终极深度升级的必需材料。",source:"熔岩区"},
+crystallinesulfur:{name:"结晶硫",cat:"basic",desc:"在高温环境中形成的黄色晶体。制作高级氧化剂和修复工具。",source:"失落之河 · 熔岩区"},
+nickel:{name:"镍矿",cat:"basic",desc:"耐腐蚀性极强的金属。深海中高级建造的必需材料。",source:"失落之河"},
+cavesulfur:{name:"洞穴硫磺",cat:"basic",desc:"爆破鱼自爆后留下的硫磺粉末。用于制作焊接器和修复工具。",source:"安全浅滩洞穴"},
+salt:{name:"盐矿",cat:"basic",desc:"天然氯化钠沉积物。用于制作漂白剂和腌制食物。",source:"安全浅滩 · 各处"},
+uraninite:{name:"铀矿",cat:"basic",desc:"放射性铀矿石。制作核反应堆燃料棒的核心材料。",source:"失落之河 · 血藻区"},
+
+// Advanced Materials
+lubricant:{name:"润滑剂",cat:"advanced",desc:"由海藻种子制成的有机润滑油。几乎所有机械装置的基础材料。",source:"海藻种子合成"},
+silicone:{name:"硅胶",cat:"advanced",desc:"弹性有机硅材料。制作脚蹼和密封件的必需材料。",source:"海藻种子合成"},
+benzene:{name:"苯",cat:"advanced",desc:"从血油中提取的有机化合物。制作高级合成材料的中间体。",source:"血油合成"},
+hydrochloricacid:{name:"盐酸",cat:"advanced",desc:"强腐蚀性酸液。用于蚀刻芯片和加工高级材料。",source:"深海蘑菇合成"},
+aerogel:{name:"气凝胶",cat:"advanced",desc:"超轻隔热材料，纳米多孔结构。制作热反应堆的核心。",source:"凝胶球+氧化铝合成"},
+fibermesh:{name:"纤维网",cat:"advanced",desc:"由海藻纤维编织的强力网布。制作急救包和合成材料的基础。",source:"海藻样本合成"},
+enameledglass:{name:"釉面玻璃",cat:"advanced",desc:"超高强度玻璃，可承受极端水压。深潜载具观察窗材料。",source:"玻璃+钻石合成"},
+polymer:{name:"聚苯胺",cat:"advanced",desc:"导电聚合物。制作高级电子设备的核心材料。",source:"盐酸+金合成"},
+plasteel:{name:"塑钢锭",cat:"advanced",desc:"钛与锂的合金，兼具轻量与强度。终极建造材料。",source:"钛锭+锂合成"},
+reactorrod:{name:"反应堆燃料棒",cat:"advanced",desc:"浓缩铀燃料棒。核反应堆的能量来源，提供海量电力。",source:"铀矿合成"},
+
+// Electronics
+battery:{name:"电池",cat:"electronic",desc:"标准动力电池。几乎所有手持工具的能源核心。",source:"酸蘑菇+铜矿石合成"},
+powercell:{name:"动力电池",cat:"electronic",desc:"大容量能源模块。载具引擎的标准动力来源。",source:"电池+硅胶合成"},
+computerchip:{name:"计算机芯片",cat:"electronic",desc:"微型集成电路。制作高级设备和扫描室的必需元件。",source:"铜线+金合成"},
+wiringkit:{name:"电路套件",cat:"electronic",desc:"基础电子线路组合。制作各种电子设备的前置材料。",source:"银+铜线合成"},
+advwiring:{name:"高级电路套件",cat:"electronic",desc:"精密电子线路。制作高级科技设备的核心组件。",source:"电路套件+金+计算机芯片合成"},
+copperwire:{name:"铜线",cat:"electronic",desc:"精炼铜导线。所有电子合成的基础连接材料。",source:"铜矿石合成"},
+ionbattery:{name:"离子电池",cat:"electronic",desc:"外星科技超级电池。容量是标准电池的5倍。",source:"离子晶体合成"},
+ionpowercell:{name:"离子动力电池",cat:"electronic",desc:"外星科技超级动力源。载具续航的终极方案。",source:"离子电池合成"},
+ioncube:{name:"离子晶体",cat:"electronic",desc:"先驱者科技的能量晶体。蕴含难以估量的纯净能量。",source:"外星设施 · 先驱者遗迹"},
+
+// Food & Water
+filteredwater:{name:"过滤水",cat:"food",desc:"经过净化的饮用水。基础生存必需品。",source:"气囊鱼合成"},
+disinfectedwater:{name:"消毒水",cat:"food",desc:"经过消毒处理的纯净饮用水。",source:"漂白剂合成"},
+bleach:{name:"漂白剂",cat:"food",desc:"杀菌消毒剂。可将海水转化为可饮用水。",source:"盐矿+珊瑚样本合成"},
+firstaid:{name:"急救包",cat:"food",desc:"标准医疗急救包。止血、消毒、包扎，潜水员的救命装备。",source:"纤维网合成"},
+nutrientblock:{name:"营养块",cat:"food",desc:"高压缩营养食品。保质期极长，适合长期深海探险。",source:"扫描室发现"},
+lanternfruit:{name:"灯笼果",cat:"food",desc:"浮岛上的发光果实。可直接食用也可种植。",source:"浮岛"},
+
+// Deployables
+beacon:{name:"信标",cat:"deploy",desc:"发射GPS定位信号。标记重要地点，茫茫深海中不再迷失。",source:"钛+铜矿石合成"},
+flare:{name:"信号弹",cat:"deploy",desc:"燃烧发光信号棒。黑暗中照明，或标记位置。",source:"洞穴硫磺合成"},
+airbladder:{name:"浮力气囊",cat:"deploy",desc:"快速充气上浮装置。紧急情况下将潜水员快速拉到水面。",source:"气囊鱼合成"},
+gravtrap:{name:"重力陷阱",cat:"deploy",desc:"产生局部引力场捕获小型鱼类。自动化食物收集。",source:"钛+铜矿石合成"},
+creaturedecoy:{name:"生物诱饵",cat:"deploy",desc:"模拟生物信号的诱饵装置。分散敌对生物注意力。",source:"钛+电路套件合成"},
+beacon:{name:"信标",cat:"deploy",desc:"发射GPS定位信号。标记重要地点，茫茫深海中不再迷失。",source:"钛+铜矿石合成"},
+mobilebay:{name:"移动载具平台",cat:"deploy",desc:"漂浮在海面的载具建造平台。制造海蛾号和海虾号的基础。",source:"钛+润滑油+动力电池合成"},
+waterlocker:{name:"防水储物箱",cat:"deploy",desc:"小型防水储物容器。水下存放物品的简易方案。",source:"钛合成"}
+};
+
+// Items image mapping
+const itemsImgMap={
+titanium:"Titanium.png",copper_ore:"Copper_Ore.png",lead:"Lead.png",
+gold:"Gold.png",diamond:"Diamond.png",lithium:"Lithium.png",
+quartz:"Quartz.png",glass:"Glass.png",magnetite:"Magnetite.png",
+kyanite:"Kyanite.png",crystallinesulfur:"Crystalline_Sulfur.png",
+nickel:"Nickel_Ore.png",cavesulfur:"Cave_Sulfur.png",
+salt:"Salt_Deposit.png",uraninite:"Uraninite_Crystal.png",
+lubricant:"Lubricant.png",silicone:"Silicone_Rubber.png",
+benzene:"Benzene.png",hydrochloricacid:"Hydrochloric_Acid.png",
+aerogel:"Aerogel.png",fibermesh:"Fiber_Mesh.png",
+enameledglass:"Enameled_Glass.png",polymer:"Polyaniline.png",
+plasteel:"Plasteel_Ingot.png",reactorrod:"Reactor_Rod.png",
+battery:"Battery.png",powercell:"Power_Cell.png",
+computerchip:"Computer_Chip.png",wiringkit:"Wiring_Kit.png",
+advwiring:"Advanced_Wiring_Kit.png",copperwire:"Copper_Wire.png",
+ionbattery:"Ion_Battery.png",ionpowercell:"Ion_Power_Cell.png",
+ioncube:"Ion_Cube.png",filteredwater:"Filtered_Water.png",
+disinfectedwater:"Disinfected_Water.png",bleach:"Bleach.png",
+firstaid:"First_Aid_Kit.png",nutrientblock:"Nutrient_Block.png",
+lanternfruit:"Lantern_Fruit.png",beacon:"Beacon.png",
+flare:"Flare.png",airbladder:"Air_Bladder.png",
+gravtrap:"Grav_Trap.png",creaturedecoy:"Creature_Decoy.png",
+mobilebay:"Mobile_Vehicle_Bay.png",waterlocker:"Waterproof_Locker.png"
+};
+
+// Items exhibit
+let itemsTab="all";
+function switchItemsTab(cat,ev){
+  itemsTab=cat;
+  var tabs=document.querySelectorAll("#itemsExhibit .tool-panel-tab");
+  for(var i=0;i<tabs.length;i++) tabs[i].classList.remove("active");
+  if(ev&&ev.target) ev.target.classList.add("active");
+  renderItemsExhibit();
+}
+function openItemsExhibit(){
+  renderItemsExhibit();
+  document.getElementById("itemsExhibit").style.display="block";
+  document.body.style.overflow="hidden";
+}
+function closeItemsExhibit(){
+  document.getElementById("itemsExhibit").style.display="none";
+  document.body.style.overflow="";
+}
+function renderItemsExhibit(){
+  var grid=document.getElementById("itemsGrid");
+  var keys=Object.keys(itemsData);
+  var html="";
+  keys.forEach(function(id){
+    var d=itemsData[id];
+    if(itemsTab!=="all"&&d.cat!==itemsTab) return;
+    var imgFile=itemsImgMap[id]||(id+".png");
+    var imgSrc="images/items/"+imgFile;
+    html+='<div class="creature-card" style="cursor:pointer">';
+    html+='<img class="creature-card-img" src="'+imgSrc+'" alt="'+d.name+'" style="height:160px;cursor:zoom-in" onclick="showItemsImage(event,'+id+')" onerror="this.hidden=true">';
+    html+='<div class="creature-card-body"><h4>'+d.name+'</h4>';
+    html+='<div class="creature-desc">'+d.desc+'</div>';
+    html+='<div class="creature-meta">';
+    html+='<span class="creature-tag" style="border-color:var(--gold)">🏠 '+d.source+'</span>';
+    html+='</div></div></div>';
+  });
+  grid.innerHTML=html||'<div style="text-align:center;padding:40px;color:var(--text2)">该分类暂无物品</div>';
+}
+function showItemsImage(ev,id){
+  ev.stopPropagation();
+  var d=itemsData[id]; if(!d) return;
+  var imgFile=itemsImgMap[id]||(id+".png");
+  var lb=document.getElementById("lightbox");
+  document.getElementById("lightboxImg").src="images/items/"+imgFile;
+  document.getElementById("lightboxCaption").innerHTML='<b style="color:var(--gold)">'+d.name+'</b><br><span style="color:var(--text2);font-size:12px">'+d.source+'</span>';
+  lb.classList.add("active");document.body.style.overflow="hidden";
+}
+
 // ═══════════ Flora Data ═══════════
 const floraData={
 acidmushroom:{name:"酸蘑菇",desc:"常见于安全浅滩的荧光蘑菇。可采集酸性孢子用于制造电池。触碰会释放酸性灼伤，建议用刀采集。",habitat:"安全浅滩",use:"电池制作 · 酸性材料"},
@@ -1883,6 +2019,7 @@ searchByCat=function(cat){
   if(cat==="基地模块"){openBaseExhibit();return}
   if(cat==="生存装备"){openGearExhibit();return}
   if(cat==="生物"){openCreatureExhibit();return}
+  if(cat==="物品"){openItemsExhibit();return}
   if(cat==="植物"){openFloraExhibit();return}
   if(cat==="升级模块"){openUpgradesExhibit();return}
   if(cat==="利维坦"){openLeviathanExhibit();return}
@@ -1989,6 +2126,24 @@ searchByCat=function(cat){
     <div class="hero-title"><div class="hero-sub">Alterra · 科技升级系统</div><h2>⚡ 升 级 模 块</h2></div>
   </div>
   <div class="creature-grid" id="upgradesGrid"></div>
+</div>
+
+
+<!-- Items Exhibit -->
+<div id="itemsExhibit">
+  <button class="exhibit-close" onclick="closeItemsExhibit()">✕</button>
+  <div class="creature-hero" style="background:linear-gradient(180deg,rgba(196,156,78,.15),rgba(2,10,20,.95))">
+    <div class="hero-title"><div class="hero-sub">4546B · 合成材料与物品</div><h2>📦 物 品 图 鉴</h2></div>
+  </div>
+  <div style="padding:12px 24px;max-width:1100px;margin:0 auto;display:flex;gap:8px;flex-wrap:wrap;position:sticky;top:0;z-index:10;background:rgba(2,10,20,.9)">
+    <div class="tool-panel-tab active" onclick="switchItemsTab('all',event)">全部</div>
+    <div class="tool-panel-tab" onclick="switchItemsTab('basic',event)">🪨 基础材料</div>
+    <div class="tool-panel-tab" onclick="switchItemsTab('advanced',event)">⚗️ 高级材料</div>
+    <div class="tool-panel-tab" onclick="switchItemsTab('electronic',event)">💻 电子元件</div>
+    <div class="tool-panel-tab" onclick="switchItemsTab('food',event)">🍖 食物与水</div>
+    <div class="tool-panel-tab" onclick="switchItemsTab('deploy',event)">📡 可部署物</div>
+  </div>
+  <div class="creature-grid" id="itemsGrid"></div>
 </div>
 
 </body>
