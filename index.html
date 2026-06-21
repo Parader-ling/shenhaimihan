@@ -258,7 +258,7 @@ body::after{content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);
 /* Lightbox */
 #lightbox{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.92);cursor:pointer;justify-content:center;align-items:center;flex-direction:column}
 #lightbox.active{display:flex;animation:fadeSlideIn .25s ease}
-#lightbox img{max-width:96vw;max-height:93vh;object-fit:contain;border-radius:8px;box-shadow:0 0 60px rgba(78,205,196,.2);cursor:default}
+#lightbox img{max-width:500px;max-height:500px;object-fit:contain;border-radius:8px;box-shadow:0 0 60px rgba(78,205,196,.2);cursor:default}
 .lb-close{position:fixed;top:20px;right:20px;z-index:210;width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);border:1px solid var(--border);color:#fff;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s}
 .lb-close:hover{background:rgba(255,107,107,.3);border-color:var(--red)}
 .lb-caption{color:var(--text2);font-size:13px;margin-top:16px;text-align:center;cursor:default}
