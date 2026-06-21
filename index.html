@@ -406,6 +406,10 @@ body::after{content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);
       <div class="tab active" id="tabForward" onclick="switchMode('forward')">正向查询</div>
       <div class="tab" id="tabReverse" onclick="switchMode('reverse')">反向查询</div>
     </div>
+    <div class="section-title">📚 资料</div>
+    <div class="cats" id="loreCats">
+      <div class="cat-card" onclick="searchByCat('故事')"><div class="icon">📖</div><div class="label">编年史</div></div>
+    </div>
     <div class="section-title">装备分类</div>
     <div class="cats" id="cats">
       <div class="cat-card" onclick="searchByCat('载具')"><div class="icon">🚗</div><div class="label">载具</div></div>
@@ -413,8 +417,6 @@ body::after{content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);
       <div class="cat-card" onclick="searchByCat('基地模块')"><div class="icon">🏠</div><div class="label">基地模块</div></div>
       <div class="cat-card" onclick="searchByCat('生存装备')"><div class="icon">🎒</div><div class="label">生存装备</div></div>
       <div class="cat-card" onclick="searchByCat('生物')"><div class="icon">🐟</div><div class="label">生物</div></div>
-      <div class="cat-card" onclick="searchByCat('游戏')"><div class="icon">🎮</div><div class="label">游戏系统</div></div>
-      <div class="cat-card" onclick="searchByCat('故事')"><div class="icon">📖</div><div class="label">编年史</div></div>
       <div class="cat-card" onclick="searchByCat('植物')"><div class="icon">🌿</div><div class="label">植物</div></div>
       
       <div class="cat-card" onclick="searchByCat('物品')"><div class="icon">📦</div><div class="label">物品</div></div>
