@@ -2238,7 +2238,7 @@ function renderSynthCats(){
 function selectSynthCat(cat){
   synthCat=cat;
   renderSynthCats();
-  var items=craftingData;
+  var items=craftingData.filter(function(d){return d.cat!=="生物"});
   if(cat!=="全部") items=items.filter(function(d){return d.cat===cat});
   var html="";
   items.forEach(function(item){
