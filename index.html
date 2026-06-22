@@ -369,6 +369,51 @@ body::after{content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);
 .story-event h4{font-size:14px;color:var(--teal);margin:0 0 4px}
 .story-event p{font-size:12px;color:var(--text2);line-height:1.6;margin:0}
 
+
+/* ═══════════ 合成工坊 ═══════════ */
+#synthExhibit{display:none;position:fixed;inset:0;z-index:100;background:rgba(2,10,20,.97);overflow-y:auto;overflow-x:hidden}
+#synthExhibit.active{display:block;animation:exhibitBoot .8s ease-out}
+.synth-header{position:sticky;top:0;z-index:10;background:rgba(2,10,20,.95);backdrop-filter:blur(12px);padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.synth-header h2{font-size:20px;color:var(--accent);text-shadow:0 0 15px rgba(255,159,67,.3);margin:0;flex:1}
+.synth-body{padding:0 20px 50px;max-width:900px;margin:0 auto}
+.synth-picker{margin:20px 0}
+.synth-picker h3{font-size:14px;color:var(--teal);margin-bottom:12px;text-shadow:0 0 8px rgba(78,205,196,.2)}
+.synth-cats{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.synth-cat-tab{padding:6px 14px;border-radius:16px;font-size:11px;cursor:pointer;border:1px solid var(--border);color:var(--text2);background:var(--glass);transition:all .2s}
+.synth-cat-tab.active,.synth-cat-tab:hover{border-color:var(--accent);color:var(--accent);background:rgba(255,159,67,.1)}
+.synth-items{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;max-height:200px;overflow-y:auto;padding:4px;scrollbar-width:thin}
+.synth-item-chip{padding:10px 8px;border-radius:10px;cursor:pointer;border:1px solid var(--border);background:var(--glass);text-align:center;transition:all .25s;font-size:11px;color:var(--text)}
+.synth-item-chip:hover,.synth-item-chip.selected{border-color:var(--accent);background:rgba(255,159,67,.1);box-shadow:0 0 12px rgba(255,159,67,.15)}
+.synth-item-chip.selected{box-shadow:0 0 20px rgba(255,159,67,.25);color:var(--accent)}
+.synth-item-chip.active-item{background:rgba(255,159,67,.2);border-color:var(--accent);font-weight:700}
+.synth-preview{display:flex;gap:20px;align-items:flex-start;margin:24px 0;padding:20px;background:var(--glass);border-radius:var(--radius);border:1px solid var(--border);flex-wrap:wrap}
+.synth-preview .sp-img{flex:0 0 160px;width:160px;height:160px;border-radius:var(--radius-sm);overflow:hidden;border:1px solid var(--border)}
+.synth-preview .sp-img img{width:100%;height:100%;object-fit:contain;background:rgba(0,0,0,.4)}
+.synth-preview .sp-info{flex:1;min-width:200px}
+.synth-preview .sp-info h3{font-size:20px;color:#fff;margin:0 0 4px}
+.synth-preview .sp-info .sp-cat{font-size:11px;color:var(--accent);margin-bottom:8px}
+.synth-preview .sp-info .sp-stars{font-size:14px;margin-bottom:6px}
+.synth-materials{margin:24px 0}
+.synth-materials h3{font-size:15px;color:var(--teal);text-shadow:0 0 8px rgba(78,205,196,.2);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.mat-card{display:flex;gap:14px;align-items:center;padding:14px;margin-bottom:10px;background:var(--glass);border:1px solid var(--border);border-radius:var(--radius);transition:all .25s}
+.mat-card:hover{border-color:var(--accent);box-shadow:0 0 15px rgba(255,159,67,.1)}
+.mat-card .mat-thumb{flex:0 0 60px;width:60px;height:60px;border-radius:8px;overflow:hidden;border:1px solid var(--border);background:rgba(0,0,0,.3)}
+.mat-card .mat-thumb img{width:100%;height:100%;object-fit:contain}
+.mat-card .mat-body{flex:1}
+.mat-card .mat-body .mat-title{font-size:14px;font-weight:600;color:#fff;display:flex;align-items:center;gap:8px}
+.mat-card .mat-body .mat-title .mat-qty{font-size:13px;color:var(--accent);font-family:monospace}
+.mat-card .mat-body .mat-source{font-size:10px;color:var(--text2);margin-top:4px;line-height:1.5}
+.mat-card .mat-body .mat-source span{display:inline-block;margin-right:6px;padding:2px 8px;border-radius:10px;background:rgba(78,205,196,.06);font-size:9px}
+.mat-card .mat-body .mat-tool{font-size:10px;color:var(--teal);margin-top:3px}
+.mat-card .mat-body .mat-danger{font-size:9px;color:var(--red);margin-top:2px;font-weight:600}
+.mat-card.has-children{border-left:3px solid var(--teal)}
+.mat-children{margin-left:32px;margin-bottom:8px;padding-left:16px;border-left:1px dashed rgba(78,205,196,.3)}
+.synth-summary{margin:24px 0;padding:18px;background:rgba(255,159,67,.05);border:1px solid rgba(255,159,67,.25);border-radius:var(--radius)}
+.synth-summary h3{font-size:15px;color:var(--accent);margin-bottom:12px;text-shadow:0 0 10px rgba(255,159,67,.2)}
+.synth-summary .sum-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+.synth-summary .sum-chip{display:flex;align-items:center;gap:6px;padding:8px 12px;background:rgba(255,255,255,.04);border-radius:8px;font-size:12px;color:var(--text)}
+.synth-summary .sum-chip .sqty{font-weight:700;color:var(--accent);font-family:monospace;min-width:20px}
+
 </style>
 </head>
 <body>
@@ -409,9 +454,7 @@ body::after{content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);
     <div class="section-title">📚 资料</div>
     <div class="cats" id="loreCats">
       <div class="cat-card" onclick="searchByCat('游戏')"><div class="icon">🎮</div><div class="label">玩法介绍</div></div>
-      <div class="cat-card" onclick="searchByCat('故事')"><div class="icon">📖</div><div class="label">背景设定</div></div>
-    </div>
-    <div class="section-title">装备分类</div>
+      <div class="cat-card" onclick="searchByCat(\x27故事\x27)"><div class="icon">📖</div><div class="label">背景设定</div></div><div class="cat-card" onclick="openSynthExhibit()" style="border-color:var(--accent);box-shadow:0 0 15px rgba(255,159,67,.15)"><div class="icon">⚙️</div><div class="label" style="color:var(--accent)">合成工坊</div></div></div><div class="section-title">装备分类</div>
     <div class="cats" id="cats">
       <div class="cat-card" onclick="searchByCat('载具')"><div class="icon">🚗</div><div class="label">载具</div></div>
       <div class="cat-card" onclick="searchByCat('工具')"><div class="icon">🔧</div><div class="label">工具</div></div>
@@ -960,7 +1003,26 @@ body::after{content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);
   <span class="lb-close" onclick="closeLightbox()">✕</span>
   <img id="lightboxImg" src="" alt="">
   <div class="lb-caption" id="lightboxCaption"></div>
-</div><script>
+</div>
+
+<!-- ═══════════ 合成工坊 ═══════════ -->
+<div id="synthExhibit">
+  <button class="exhibit-close" onclick="closeSynthExhibit()">✕</button>
+  <div class="synth-header">
+    <span style="font-size:28px">⚙️</span>
+    <h2>合成工坊</h2>
+    <span style="font-size:11px;color:var(--text2)">选择目标装备，查看合成配方</span>
+  </div>
+  <div class="synth-body">
+    <div class="synth-picker">
+      <h3>📋 选择要合成的装备</h3>
+      <div class="synth-cats" id="synthCats"></div>
+      <div class="synth-items" id="synthItems"></div>
+    </div>
+    <div id="synthResult"></div>
+  </div>
+</div>
+<script>
 (function(){
   const c=document.getElementById('bubbles');
   for(let i=0;i<60;i++){const b=document.createElement('div');b.className='bubble';const s=Math.random()*20+4;b.style.width=s+'px';b.style.height=s+'px';b.style.left=Math.random()*100+'%';b.style.animationDuration=(Math.random()*10+8)+'s';b.style.animationDelay=Math.random()*10+'s';c.appendChild(b)}
@@ -2150,6 +2212,109 @@ searchByCat=function(cat){
   _origSearchByCat(cat);
 };
 
+
+// ═══════════ 合成工坊 ═══════════
+var synthCat="全部";
+var synthSelectedId=null;
+function openSynthExhibit(){
+  document.getElementById("synthExhibit").classList.add("active");
+  document.body.style.overflow="hidden";
+  renderSynthCats();
+  selectSynthCat("全部");
+}
+function closeSynthExhibit(){
+  document.getElementById("synthExhibit").classList.remove("active");
+  document.body.style.overflow="";
+  synthSelectedId=null;
+}
+function renderSynthCats(){
+  var cats=["全部","载具","工具","基地模块","生存装备"];
+  var html="";
+  cats.forEach(function(c){
+    html+='<div class="synth-cat-tab'+(synthCat===c?" active":"")+'" onclick="selectSynthCat(\x27'+c+'\x27)">'+c+'</div>';
+  });
+  document.getElementById("synthCats").innerHTML=html;
+}
+function selectSynthCat(cat){
+  synthCat=cat;
+  renderSynthCats();
+  var items=craftingData;
+  if(cat!=="全部") items=items.filter(function(d){return d.cat===cat});
+  var html="";
+  items.forEach(function(item){
+    html+='<div class="synth-item-chip'+(synthSelectedId===item.id?" selected active-item":"")+'" onclick="selectSynthItem(\x27'+item.id+'\x27)"><div style="font-size:20px;margin-bottom:4px">'+item.img+'</div><div>'+item.name+'</div></div>';
+  });
+  document.getElementById("synthItems").innerHTML=html||'<div style="color:var(--text2);text-align:center;padding:12px">该分类暂无物品</div>';
+}
+function selectSynthItem(id){
+  synthSelectedId=id;
+  selectSynthCat(synthCat);
+  renderSynthRecipe(id);
+}
+function renderSynthRecipe(id){
+  var item=craftingData.find(function(d){return d.id===id});
+  if(!item) return;
+  var result=document.getElementById("synthResult");
+  var stars="";
+  for(var i=0;i<(item.stars||0);i++) stars+="⭐";
+  var html="";
+  html+='<div class="synth-preview"><div class="sp-img">'+item.img+'</div><div class="sp-info"><h3>'+item.name+'</h3><div class="sp-cat">'+item.cat+'</div><div class="sp-stars">'+stars+'</div><p style="font-size:12px;color:var(--text2);line-height:1.6">合成所需材料清单如下，部分材料需要进一步加工。</p></div></div>';
+  html+='<div class="synth-materials"><h3>📦 合成材料清单</h3>';
+  if(item.materials&&item.materials.length>0){
+    // Count total raw materials
+    var rawCount={};
+    function countMats(mats){
+      mats.forEach(function(m){
+        if(m.mid&&m.children){
+          countMats(m.children);
+        }else{
+          var key=m.name;
+          if(!rawCount[key]) rawCount[key]={qty:0,img:m.img,source:m.source,tool:m.tool,danger:m.danger};
+          rawCount[key].qty+=m.qty;
+        }
+      });
+    }
+    countMats(item.materials);
+
+    item.materials.forEach(function(m){
+      var hasKids=m.mid&&m.children&&m.children.length>0;
+      html+='<div class="mat-card'+(hasKids?" has-children":"")+'"><div class="mat-thumb">'+m.img+'</div><div class="mat-body"><div class="mat-title"><span>'+m.name+'</span><span class="mat-qty">×'+m.qty+'</span></div>';
+      html+='<div class="mat-source">';
+      if(m.source&&m.source.length) m.source.forEach(function(s){html+='<span>🏠 '+s+'</span>'});
+      html+='</div>';
+      if(m.tool) html+='<div class="mat-tool">🔧 所需工具: '+m.tool+'</div>';
+      if(m.danger) html+='<div class="mat-danger">⚠ 危险区域 · 注意安全</div>';
+      html+='</div></div>';
+      if(hasKids){
+        html+='<div class="mat-children">';
+        m.children.forEach(function(c){
+          html+='<div class="mat-card"><div class="mat-thumb">'+c.img+'</div><div class="mat-body"><div class="mat-title"><span>'+c.name+'</span><span class="mat-qty">×'+c.qty+'</span></div>';
+          html+='<div class="mat-source">';
+          if(c.source&&c.source.length) c.source.forEach(function(s){html+='<span>🏠 '+s+'</span>'});
+          html+='</div>';
+          if(c.tool) html+='<div class="mat-tool">🔧 所需工具: '+c.tool+'</div>';
+          html+='</div></div>';
+        });
+        html+='</div>';
+      }
+    });
+
+    // Summary
+    var sumKeys=Object.keys(rawCount);
+    if(sumKeys.length>0){
+      html+='<div class="synth-summary"><h3>📊 基础材料总计</h3><div class="sum-grid">';
+      sumKeys.forEach(function(k){
+        var rc=rawCount[k];
+        html+='<div class="sum-chip"><span class="sqty">×'+rc.qty+'</span><span>'+k+'</span></div>';
+      });
+      html+='</div></div>';
+    }
+  }else{
+    html+='<div style="text-align:center;padding:20px;color:var(--text2)">暂无合成数据</div>';
+  }
+  html+='</div>';
+  result.innerHTML=html;
+}
 </script>
 
 <!-- ═══════════ Tool Intro Panel ═══════════ -->
