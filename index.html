@@ -319,7 +319,7 @@ body::after{content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);
 @keyframes toolPulse{0%,100%{box-shadow:0 0 20px rgba(78,205,196,.25),0 0 60px rgba(78,205,196,.1)}50%{box-shadow:0 0 35px rgba(78,205,196,.4),0 0 90px rgba(78,205,196,.2)}}
 
 /* Creature & Leviathan Exhibit */
-#creatureExhibit,#leviathanExhibit,#vehicleExhibit,#toolsExhibit,#baseExhibit,#gearExhibit,#floraExhibit,#upgradesExhibit,#itemsExhibit,#gameplayExhibit,#storyExhibit{display:none;position:fixed;inset:0;z-index:100;background:rgba(2,10,20,.97);overflow-y:auto;overflow-x:hidden}
+#creatureExhibit,#leviathanExhibit,#vehicleExhibit,#toolsExhibit,#baseExhibit,#gearExhibit,#floraExhibit,#upgradesExhibit,#itemsExhibit,#gameplayExhibit,#storyExhibit{display:none;position:fixed;inset:0;z-index:100;background:rgba(2,10,20,.97);overflow-y:auto;overflow-x:hidden}#gameplayExhibit.active,#storyExhibit.active{display:block;animation:exhibitBoot .8s ease-out}#storyExhibit.active{display:block;animation:exhibitBoot .8s ease-out}
 .creature-hero{position:relative;height:200px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(2,30,40,.8),rgba(2,10,20,.95))}
 .creature-hero .hero-title{text-align:center;z-index:2}
 .creature-hero .hero-title h2{font-size:42px;margin:0;letter-spacing:6px;color:#fff;text-shadow:0 0 30px var(--teal)}
@@ -1926,19 +1926,19 @@ function injectVehicleUpgrades(vehId,vehName,exhibitId){
 
 
 function openGameplayExhibit(){
-  document.getElementById("gameplayExhibit").style.display="block";
+  document.getElementById("gameplayExhibit").classList.add("active");
   document.body.style.overflow="hidden";
 }
 function closeGameplayExhibit(){
-  document.getElementById("gameplayExhibit").style.display="none";
+  document.getElementById("gameplayExhibit").classList.remove("active");
   document.body.style.overflow="";
 }
 function openStoryExhibit(){
-  document.getElementById("storyExhibit").style.display="block";
+  document.getElementById("storyExhibit").classList.add("active");
   document.body.style.overflow="hidden";
 }
 function closeStoryExhibit(){
-  document.getElementById("storyExhibit").style.display="none";
+  document.getElementById("storyExhibit").classList.remove("active");
   document.body.style.overflow="";
 }
 
